@@ -5,3 +5,9 @@ data class Topic(
     val name : String,
     val description : String,
 )
+
+data class TopicDTO(
+    val name : String,
+    val description: String,
+)
+

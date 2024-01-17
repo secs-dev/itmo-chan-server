@@ -5,3 +5,4 @@ data class Captcha(
     val answer : String?,
     val pictureId : Int,
 )
+

@@ -6,3 +6,7 @@ data class Thread(
     val initCommentId : Int,
     val popularity : Int,
 )
+
+data class ThreadDTO(
+    val topicId : Int,
+)

@@ -18,3 +18,10 @@ data class Reply(
     val commentId : Int,
     val replyCommentId : Int,
 )
+
+data class CommentDTO(
+    val threadId : Int,
+    val title : String?,
+    val content : String,
+    val userId : Int,
+)

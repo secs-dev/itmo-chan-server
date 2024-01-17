@@ -12,3 +12,4 @@ data class VideoAttachments(
     val commentId : Int,
     val videoId : Int,
 )
+

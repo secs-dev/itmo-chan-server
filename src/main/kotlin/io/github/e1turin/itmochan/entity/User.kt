@@ -7,3 +7,10 @@ data class User(
     val roleId : Int?,
     val password : String,
 )
+
+data class UserDTO(
+    val username : String,
+    val isuId : Int,
+    val roleId : Int?,
+    val password : String,
+)

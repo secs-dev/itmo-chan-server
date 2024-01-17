@@ -11,9 +11,17 @@ data class VotedUsers(
     val userId : Int,
 )
 
-data class PollAnswers(
+data class PollAnswer(
     val pollAnswerId : Int,
     val pollId : Int,
     val answerTitle : String,
     val votesNumber : Int,
+)
+
+data class PollDTO(
+    val title : String,
+)
+
+data class PollAnswerDTO(
+    val answerTitle : String,
 )

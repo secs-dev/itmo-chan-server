@@ -8,3 +8,4 @@ data class Trash(
     val reason : String?,
     val recycleDate : LocalDateTime,
 )
+
