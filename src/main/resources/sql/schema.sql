@@ -367,7 +367,7 @@ CREATE OR REPLACE TRIGGER  trash_insert_comment_trigger
 
 /* indicies */
 
-CREATE INDEX "Users_isu_index" ON "Users" USING btree(isu_id); -- number
+/*CREATE INDEX "Users_isu_index" ON "Users" USING btree(isu_id); -- number
 -- CREATE INDEX "Users_role_index" ON "Users" USING hash(role); -- TOO SMALL
 CREATE INDEX "Users_username_substring_index" ON "Users" USING GIN(username); -- search text through names, never joins
 CREATE INDEX "Users_username_index" ON "Users" USING hash(username);
@@ -386,3 +386,4 @@ CREATE INDEX "Polls_comment_id_index" ON "Polls" USING hash(comment_id);
 
 CREATE INDEX "Trash_comment_id_index" ON "Trash" USING btree(comment_id); -- number
 CREATE INDEX "Trash_recycle_date_index" ON "Trash" USING btree(recycle_date); -- for filterings
+*/
