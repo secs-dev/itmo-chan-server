@@ -3,8 +3,8 @@
 CREATE TABLE IF NOT EXISTS "Users" (
                          user_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                          username varchar(255) NOT NULL UNIQUE,
-                         isu_id integer NOT NULL UNIQUE,
-                         permissions integer NOT NULL DEFAULT 1, -- permissions is sum of roles id -- TODO Maybe future problem with max int postgres (31 roles) but it looks pretty nice as for me
+                         isu_id integer NULL UNIQUE,
+                         permissions integer NOT NULL DEFAULT 1, -- permissions is sum of roles id -- TODO Maybe future problem with max int postgres (31 roles) but it looks pretty nice as for me if change to bigint
                          password varchar(255) NOT NULL
 );
 
