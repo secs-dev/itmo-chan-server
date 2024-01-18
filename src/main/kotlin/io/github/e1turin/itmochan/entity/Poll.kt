@@ -1,19 +1,19 @@
 package io.github.e1turin.itmochan.entity
 
 data class Poll(
-    val pollId : Int,
-    val commentId : Int,
+    val pollId : Long,
+    val commentId : Long,
     val title : String,
 )
 
 data class VotedUsers(
-    val pollId : Int,
-    val userId : Int,
+    val pollId : Long,
+    val userId : Long,
 )
 
 data class PollAnswer(
-    val pollAnswerId : Int,
-    val pollId : Int,
+    val pollAnswerId : Long,
+    val pollId : Long,
     val answerTitle : String,
     val votesNumber : Int,
 )
