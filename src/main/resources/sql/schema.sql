@@ -1,20 +1,20 @@
 /* tables */
 
-/* permissions is sum:
-    1 - guest
-    2 - common user
-    4 - moderator
-    8 - admin
-*/
 CREATE TABLE IF NOT EXISTS "Users" (
                          user_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                          username varchar(255) NOT NULL UNIQUE,
                          isu_id integer NOT NULL UNIQUE,
-                         permissions integer NOT NULL DEFAULT 1,
+                         permissions integer NOT NULL DEFAULT 1, -- permissions is sum of roles id -- TODO Maybe future problem with max int postgres (31 roles) but it looks pretty nice as for me
                          password varchar(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS  "Comments" (
+CREATE TABLE IF NOT EXISTS "Roles" (
+                         role_id integer PRIMARY KEY,
+                         name varchar(255) NOT NULL UNIQUE,
+                         description text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "Comments" (
                             comment_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                             thread_id integer NOT NULL,
                             title varchar(255),
