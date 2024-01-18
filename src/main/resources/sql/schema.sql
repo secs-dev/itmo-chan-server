@@ -1,17 +1,17 @@
 /* tables */
 
+/* permissions is sum:
+    1 - guest
+    2 - common user
+    4 - moderator
+    8 - admin
+*/
 CREATE TABLE IF NOT EXISTS "Users" (
                          user_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                          username varchar(255) NOT NULL UNIQUE,
                          isu_id integer NOT NULL UNIQUE,
-                         role_id integer DEFAULT NULL,
+                         permissions integer NOT NULL DEFAULT 1,
                          password varchar(255) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS  "Roles" (
-                         role_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                         name varchar(255) NOT NULL UNIQUE,
-                         description text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS  "Comments" (
@@ -109,11 +109,6 @@ CREATE TABLE IF NOT EXISTS  "Captcha" (
 /* constraints */
 
 /* Users */
-
-ALTER TABLE "Users"
-    ADD FOREIGN KEY (role_id)
-        REFERENCES "Roles" (role_id)
-        ON DELETE RESTRICT;
 
 ALTER TABLE "Users" DROP CONSTRAINT IF EXISTS "username_minimal_length";
 ALTER TABLE "Users"
