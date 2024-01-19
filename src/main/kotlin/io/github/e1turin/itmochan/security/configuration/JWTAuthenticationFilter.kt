@@ -1,13 +1,18 @@
 package io.github.e1turin.itmochan.security.configuration
 
+import io.github.e1turin.itmochan.security.exception.WrongUsernameException
 import io.github.e1turin.itmochan.security.service.CustomUserDetailsService
 import io.github.e1turin.itmochan.security.service.TokenService
+import io.github.e1turin.itmochan.utils.wrapErrorToHttpResponse
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.JwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -23,17 +28,36 @@ class JWTAuthenticationFilter(
         filterChain: FilterChain
     ) {
         val authHeader: String? = request.getHeader("Authorization")
-        if (authHeader.doesNotContainBearerToken()) {
+        if (authHeader.isNullOrEmpty() || authHeader.doesNotContainBearerToken()) {
             filterChain.doFilter(request, response)
             return
         }
-        val jwtToken = authHeader!!.extractTokenValue()
-        val username = tokenService.extractUsername(jwtToken)
-        if (username != null && SecurityContextHolder.getContext().authentication == null) {
-            val foundUser = userDetailsService.loadUserByUsername(username)
-            if (tokenService.isValid(jwtToken, foundUser))
+        val jwtToken = authHeader.extractTokenValue()
+        try {
+            val username = tokenService.verifyToken(jwtToken)
+            if (username != null && SecurityContextHolder.getContext().authentication == null) {
+                val foundUser = userDetailsService.loadUserByUsername(username)
+                tokenService.isSameUsername(jwtToken, foundUser)
                 updateContext(foundUser, request)
-            filterChain.doFilter(request, response)
+                filterChain.doFilter(request, response)
+            }
+        }
+        //TODO move to another filter
+        catch(e : ExpiredJwtException) {
+            wrapErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, "Token has been expired", response)
+            e.printStackTrace() //TODO add logger
+        }
+        catch (e : WrongUsernameException) {
+            wrapErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, e.message ?: "Different username", response)
+            e.printStackTrace() //TODO add logger
+        }
+        catch (e : JwtException) {
+            wrapErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, "Invalid token", response)
+            e.printStackTrace() //TODO add logger
+        }
+        catch (e : UsernameNotFoundException) {
+            wrapErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, e.message ?: "There is no such user", response)
+            e.printStackTrace() //TODO add logger
         }
     }
     private fun String?.doesNotContainBearerToken() =
