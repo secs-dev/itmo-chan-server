@@ -1,7 +1,6 @@
 package io.github.e1turin.itmochan.service
 
-import io.github.e1turin.itmochan.entity.User
-import io.github.e1turin.itmochan.entity.UserRegister
+import io.github.e1turin.itmochan.entity.*
 import io.github.e1turin.itmochan.repository.UserRepository
 import io.github.e1turin.itmochan.security.exception.NoSuchUsernameException
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -22,6 +21,9 @@ class UserService(
     }
 
     fun save(user : UserRegister) {
+        validateUsername(user.username)
+        validateIsuId(user.isuId)
+        validatePassword(user.password)
         db.saveUser(user.username, user.isuId, encoder.encode(user.password))
     }
 }
