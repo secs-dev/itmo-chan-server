@@ -42,6 +42,7 @@ class AuthenticationService(
             throw DuplicatedUsernameException("Username '${userRegister.username}' is already taken")
         } catch (e : NoSuchUsernameException) {
             userService.save(userRegister)
+            userService.provideUserPermissionsToUser(userRegister.username)
             authManager.authenticate(
                 UsernamePasswordAuthenticationToken(
                     userRegister.username,

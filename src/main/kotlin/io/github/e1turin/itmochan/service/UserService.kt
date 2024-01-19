@@ -2,19 +2,21 @@ package io.github.e1turin.itmochan.service
 
 import io.github.e1turin.itmochan.entity.*
 import io.github.e1turin.itmochan.repository.UserRepository
+import io.github.e1turin.itmochan.security.exception.NoSuchRoleException
 import io.github.e1turin.itmochan.security.exception.NoSuchUsernameException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(
-    val db : UserRepository,
+    private val userRepository : UserRepository,
+    private val roleService: RoleService,
     private val encoder: PasswordEncoder,
 ) {
-    fun findUsers() : List<User> = db.findAll().toList()
+    fun findUsers() : List<User> = userRepository.findAll().toList()
 
     fun findUserByUsername(username: String) : User {
-        val usernameFound = db.findUserByUsername(username)
+        val usernameFound = userRepository.findUserByUsername(username)
         if (usernameFound.isEmpty)
             throw NoSuchUsernameException("Username '$username' doesn't exists")
         return usernameFound.get()
@@ -24,6 +26,12 @@ class UserService(
         validateUsername(user.username)
         validateIsuId(user.isuId)
         validatePassword(user.password)
-        db.saveUser(user.username, user.isuId, encoder.encode(user.password))
+        userRepository.saveUser(user.username, user.isuId, encoder.encode(user.password))
+    }
+
+    fun provideUserPermissionsToUser(username: String) {
+        val role = roleService.findRoleByName("USER")
+        val user = findUserByUsername(username)
+        userRepository.save(user.copy(permissions = user.permissions + role.roleId))
     }
 }
