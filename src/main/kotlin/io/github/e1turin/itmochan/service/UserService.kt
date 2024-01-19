@@ -1,7 +1,7 @@
 package io.github.e1turin.itmochan.service
 
 import io.github.e1turin.itmochan.entity.User
-import io.github.e1turin.itmochan.entity.UserDTO
+import io.github.e1turin.itmochan.entity.UserRegister
 import io.github.e1turin.itmochan.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -13,9 +13,7 @@ class UserService(
 ) {
     fun findUsers() : List<User> = db.findAll().toList()
 
-    fun save(user : UserDTO) {
-        val updated = user.copy(password = encoder.encode(user.password))
-        db.save(updated)
+    fun save(user : UserRegister) {
+        db.saveUser(user.username, user.isuId, encoder.encode(user.password))
     }
-    //fun findUserByUsername(username : String) = db.findUserByUsername(username).orElseThrow(NotFound)
 }

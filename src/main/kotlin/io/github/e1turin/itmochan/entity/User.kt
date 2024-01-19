@@ -11,8 +11,13 @@ data class User(
     val password : String,
 )
 
-data class UserDTO(
+data class UserRegister(
     val username : String,
     val isuId : Long?,
+    val password : String,
+)
+
+data class UserAuth(
+    val username: String,
     val password : String,
 )
