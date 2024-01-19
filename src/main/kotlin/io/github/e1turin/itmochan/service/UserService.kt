@@ -2,7 +2,6 @@ package io.github.e1turin.itmochan.service
 
 import io.github.e1turin.itmochan.entity.*
 import io.github.e1turin.itmochan.repository.UserRepository
-import io.github.e1turin.itmochan.security.exception.NoSuchRoleException
 import io.github.e1turin.itmochan.security.exception.NoSuchUsernameException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(
     private val userRepository : UserRepository,
-    private val roleService: RoleService,
+    private val roleService: RolesService,
     private val encoder: PasswordEncoder,
 ) {
     fun findUsers() : List<User> = userRepository.findAll().toList()
@@ -27,6 +26,11 @@ class UserService(
         validateIsuId(user.isuId)
         validatePassword(user.password)
         userRepository.saveUser(user.username, user.isuId, encoder.encode(user.password))
+    }
+
+    //TODO to think about saving guests
+    fun saveGuest(username: String) {
+        userRepository.saveUser(username, null, encoder.encode(username))
     }
 
     fun provideUserPermissionsToUser(username: String) {

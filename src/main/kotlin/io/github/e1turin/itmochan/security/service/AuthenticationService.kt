@@ -57,6 +57,29 @@ class AuthenticationService(
             )
         }
     }
+
+    //TODO make through AnonymousAuthenticationToken
+    fun guest() : AuthenticationResponse {
+        val username = UUID.randomUUID().toString()
+        try {
+            userService.findUserByUsername(username)
+            throw DuplicatedUsernameException("Username '${username}' is already taken")
+        } catch (e : NoSuchUsernameException) {
+            userService.saveGuest(username)
+            authManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    username,
+                    username,
+                )
+            )
+            val user = userDetailsService.loadUserByUsername(username)
+            val accessToken = createAccessToken(user)
+            return AuthenticationResponse(
+                user.username,
+                accessToken = accessToken,
+            )
+        }
+    }
     private fun createAccessToken(user: UserDetails) = tokenService.generate(
         userDetails = user,
         expirationDate = getAccessTokenExpiration()

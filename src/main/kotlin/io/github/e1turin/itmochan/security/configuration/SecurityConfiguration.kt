@@ -25,8 +25,10 @@ class SecurityConfiguration(
             .authorizeHttpRequests {
                 it
                     .requestMatchers(HttpMethod.POST,"/api/auth/login", "/api/auth/register").permitAll()
-                    .requestMatchers("/api/admin").hasRole("admin").anyRequest()
-                    .fullyAuthenticated()
+                    .requestMatchers(HttpMethod.GET, "api/auth/guest").permitAll()
+                    .requestMatchers("/api/admin").hasRole("ADMIN")
+                    .requestMatchers("/**").hasRole("USER")
+                    .anyRequest().denyAll()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
