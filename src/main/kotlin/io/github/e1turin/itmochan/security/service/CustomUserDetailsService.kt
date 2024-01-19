@@ -18,7 +18,7 @@ class CustomUserDetailsService(
     override fun loadUserByUsername(username: String): UserDetails =
         userRepository.findUserByUsername(username).getOrNull()
             ?.mapToUserDetails()
-            ?: throw UsernameNotFoundException("There is such user in system!")
+            ?: throw UsernameNotFoundException("There is not such user in system!")
     private fun ApplicationUser.mapToUserDetails(): UserDetails =
         User.builder()
             .username(this.username)
