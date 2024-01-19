@@ -3,7 +3,7 @@ package io.github.e1turin.itmochan.security.configuration
 import io.github.e1turin.itmochan.security.exception.WrongUsernameException
 import io.github.e1turin.itmochan.security.service.CustomUserDetailsService
 import io.github.e1turin.itmochan.security.service.TokenService
-import io.github.e1turin.itmochan.utils.wrapErrorToHttpResponse
+import io.github.e1turin.itmochan.utils.includeErrorToHttpResponse
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import jakarta.servlet.FilterChain
@@ -44,19 +44,19 @@ class JWTAuthenticationFilter(
         }
         //TODO move to another filter
         catch(e : ExpiredJwtException) {
-            wrapErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, "Token has been expired", response)
+            includeErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, "Token has been expired", response)
             e.printStackTrace() //TODO add logger
         }
         catch (e : WrongUsernameException) {
-            wrapErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, e.message ?: "Different username", response)
+            includeErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, e.message ?: "Different username", response)
             e.printStackTrace() //TODO add logger
         }
         catch (e : JwtException) {
-            wrapErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, "Invalid token", response)
+            includeErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, "Invalid token", response)
             e.printStackTrace() //TODO add logger
         }
         catch (e : UsernameNotFoundException) {
-            wrapErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, e.message ?: "There is no such user", response)
+            includeErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, e.message ?: "There is no such user", response)
             e.printStackTrace() //TODO add logger
         }
     }
