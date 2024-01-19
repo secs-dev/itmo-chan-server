@@ -12,7 +12,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
-    @ExceptionHandler(value = [DuplicatedUsernameException::class, UsernameMinLengthException::class, IsuIdNegativeException::class, PasswordMinLengthException::class])
+    @ExceptionHandler(value = [
+        DuplicatedUsernameException::class,
+        UsernameMinLengthException::class,
+        UsernameMaxLengthException::class,
+        IsuIdNegativeException::class,
+        PasswordMinLengthException::class,
+    ])
     protected fun handleUserRegisterRestrictions(
         ex: RuntimeException, request: WebRequest,
     ): ResponseEntity<Any>? {

@@ -2,6 +2,7 @@ package io.github.e1turin.itmochan.entity
 
 import io.github.e1turin.itmochan.security.exception.IsuIdNegativeException
 import io.github.e1turin.itmochan.security.exception.PasswordMinLengthException
+import io.github.e1turin.itmochan.security.exception.UsernameMaxLengthException
 import io.github.e1turin.itmochan.security.exception.UsernameMinLengthException
 import org.springframework.data.relational.core.mapping.Table
 
@@ -29,6 +30,8 @@ fun validateUsername(username: String) {
 
     if (username.length < 3)
         throw UsernameMinLengthException("Min length of username is 3 symbols")
+    if (username.length > 32)
+        throw UsernameMaxLengthException("Max length of username is 32 symbols")
 }
 
 fun validateIsuId(isuId: Long?) {
