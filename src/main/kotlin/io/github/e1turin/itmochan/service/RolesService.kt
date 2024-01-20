@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class RolesService(
-    private val service : RoleRepository,
+    private val repository : RoleRepository,
 ) {
 
     fun findRoleByName(name: String): Role{
-        val role = service.findRoleByName(name)
+        val role = repository.findRoleByName(name)
         if (role.isEmpty)
             throw NoSuchRoleException("Role '$name' doesn't exists")
         return role.get()
