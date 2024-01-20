@@ -44,10 +44,10 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     protected fun handleTopicError(
         ex: RuntimeException, request: WebRequest,
     ): ResponseEntity<Any>? {
-        val bodyOfResponse = wrapErrorToJson(HttpStatus.BAD_REQUEST.value(), ex.message!!)
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.NOT_FOUND.value(), ex.message!!)
         return handleExceptionInternal(
             ex, bodyOfResponse,
-            HttpHeaders(), HttpStatus.BAD_REQUEST, request
+            HttpHeaders(), HttpStatus.NOT_FOUND, request
         )
     }
 }
