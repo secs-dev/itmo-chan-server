@@ -39,4 +39,15 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
             HttpHeaders(), HttpStatus.BAD_REQUEST, request
         )
     }
+
+    @ExceptionHandler(value = [NoSuchTopicException::class])
+    protected fun handleTopicError(
+        ex: RuntimeException, request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.BAD_REQUEST.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.BAD_REQUEST, request
+        )
+    }
 }

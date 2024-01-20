@@ -29,6 +29,9 @@ class SecurityConfiguration(
                 it
                     .requestMatchers(HttpMethod.POST,"/api/auth/login", "/api/auth/register").permitAll()
                     .requestMatchers(HttpMethod.GET, "api/auth/guest").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "api/topic/**").permitAll()
+                    .requestMatchers(HttpMethod.PUT, "/api/topic").permitAll()
+                    .requestMatchers(HttpMethod.GET, "api/topic/**").permitAll()
                     .requestMatchers("/api/admin").hasRole("ADMIN")
                     .requestMatchers("/**").hasRole("USER")
                     .anyRequest().denyAll()
