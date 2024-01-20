@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.security.web.access.AccessDeniedHandler
+
+
 
 @Configuration
 @EnableConfigurationProperties(JWTProperties::class)
@@ -38,4 +42,9 @@ class Configuration {
     @Bean
     fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager =
         config.authenticationManager
+
+    @Bean
+    fun authenticationEntryPoint(): AuthenticationEntryPoint {
+        return CustomAuthenticationEntryPoint()
+    }
 }

@@ -1,5 +1,6 @@
 package io.github.e1turin.itmochan.security.service
 import io.github.e1turin.itmochan.repository.UserRepository
+import io.github.e1turin.itmochan.security.exception.NoSuchUsernameException
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -18,7 +19,7 @@ class CustomUserDetailsService(
     override fun loadUserByUsername(username: String): UserDetails =
         userRepository.findUserByUsername(username).getOrNull()
             ?.mapToUserDetails()
-            ?: throw UsernameNotFoundException("There is not such user in system!")
+            ?: throw UsernameNotFoundException("There is no such user in system!")
     private fun ApplicationUser.mapToUserDetails(): UserDetails =
         User.builder()
             .username(this.username)
