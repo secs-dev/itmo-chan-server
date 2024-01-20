@@ -1,4 +1,4 @@
-package io.github.e1turin.itmochan.security.entity
+package io.github.e1turin.itmochan.response
 
 data class AuthenticationResponse(
     val username: String,
