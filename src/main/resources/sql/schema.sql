@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS  "Replies" (
 CREATE TABLE IF NOT EXISTS  "Threads" (
                            thread_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                            topic_id integer NOT NULL,
-                           init_comment_id integer NOT NULL,
+                           init_comment_id integer NULL,
                            popularity INTEGER NOT NULL DEFAULT 0
 );
 

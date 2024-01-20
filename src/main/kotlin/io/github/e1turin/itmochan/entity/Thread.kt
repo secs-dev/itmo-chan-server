@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Table
 data class Thread(
     val threadId : Long,
     val topicId : Long,
-    val initCommentId : Long,
+    val initCommentId : Long?,
     val popularity : Int,
 )
 
