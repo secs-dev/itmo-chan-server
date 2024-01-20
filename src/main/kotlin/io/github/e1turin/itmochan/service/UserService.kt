@@ -36,6 +36,6 @@ class UserService(
     fun provideUserPermissionsToUser(username: String) {
         val role = roleService.findRoleByName("USER")
         val user = findUserByUsername(username)
-        userRepository.save(user.copy(permissions = user.permissions + role.roleId))
+        userRepository.updatePermissions(user.userId, user.permissions + role.roleId)
     }
 }

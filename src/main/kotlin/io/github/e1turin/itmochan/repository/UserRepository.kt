@@ -6,7 +6,7 @@ import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.lang.Nullable
-import java.util.Optional
+import java.util.*
 
 interface UserRepository : CrudRepository<User, Long> {
 
@@ -20,4 +20,7 @@ interface UserRepository : CrudRepository<User, Long> {
         @Param("password") password : String,
         )
 
+    @Modifying
+    @Query("UPDATE \"Users\" SET permissions = :permissions where user_id = :user_id")
+    fun updatePermissions(@Param(value = "user_id") userId: Long, @Param(value = "permissions") phone: Long)
 }
