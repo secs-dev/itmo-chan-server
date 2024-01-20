@@ -2,7 +2,7 @@ package io.github.e1turin.itmochan.controller
 
 import io.github.e1turin.itmochan.entity.UserAuth
 import io.github.e1turin.itmochan.entity.UserRegister
-import io.github.e1turin.itmochan.security.entity.AuthenticationResponse
+import io.github.e1turin.itmochan.response.AuthenticationResponse
 import io.github.e1turin.itmochan.security.service.AuthenticationService
 import org.springframework.web.bind.annotation.*
 

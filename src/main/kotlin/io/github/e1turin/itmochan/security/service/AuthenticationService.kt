@@ -3,7 +3,7 @@ package io.github.e1turin.itmochan.security.service
 import io.github.e1turin.itmochan.entity.UserAuth
 import io.github.e1turin.itmochan.entity.UserRegister
 import io.github.e1turin.itmochan.security.configuration.JWTProperties
-import io.github.e1turin.itmochan.security.entity.AuthenticationResponse
+import io.github.e1turin.itmochan.response.AuthenticationResponse
 import io.github.e1turin.itmochan.security.exception.DuplicatedUsernameException
 import io.github.e1turin.itmochan.security.exception.NoSuchUsernameException
 import io.github.e1turin.itmochan.service.UserService
