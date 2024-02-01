@@ -4,6 +4,7 @@ import io.github.e1turin.itmochan.entity.UserAuth
 import io.github.e1turin.itmochan.entity.UserRegister
 import io.github.e1turin.itmochan.response.AuthenticationResponse
 import io.github.e1turin.itmochan.security.service.AuthenticationService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -19,7 +20,7 @@ class AuthController(
 
     @PostMapping("/register")
     fun register(
-        @RequestBody userRegister: UserRegister
+        @RequestBody @Valid userRegister: UserRegister
     ): AuthenticationResponse =
         authenticationService.register(userRegister)
 

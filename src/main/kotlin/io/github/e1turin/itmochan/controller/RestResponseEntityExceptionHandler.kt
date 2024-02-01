@@ -14,10 +14,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(value = [
         DuplicatedUsernameException::class,
-        UsernameMinLengthException::class,
-        UsernameMaxLengthException::class,
-        IsuIdNegativeException::class,
-        PasswordMinLengthException::class,
     ])
     protected fun handleUserRegisterRestrictions(
         ex: RuntimeException, request: WebRequest,

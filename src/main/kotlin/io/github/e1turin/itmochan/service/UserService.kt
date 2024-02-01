@@ -22,9 +22,6 @@ class UserService(
     }
 
     fun save(user : UserRegister) {
-        validateUsername(user.username)
-        validateIsuId(user.isuId)
-        validatePassword(user.password)
         userRepository.saveUser(user.username, user.isuId, encoder.encode(user.password))
     }
 
