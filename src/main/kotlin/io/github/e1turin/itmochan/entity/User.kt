@@ -1,6 +1,5 @@
 package io.github.e1turin.itmochan.entity
 
-import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.Size
 import org.springframework.data.relational.core.mapping.Table
@@ -15,11 +14,11 @@ data class User(
 )
 
 data class UserRegister(
-    @Size(min = 3, max = 32, message = "Username length should be at least 3 symbols and at maximum 32")
+    @field:Size(min = 3, max = 32, message = "Username length should be at least 3 symbols and at maximum 32")
     val username : String,
-    @Positive @NotNull
+    @field:Positive
     val isuId : Long?,
-    @Size(min = 8, message = "Password length should contains at least 8 symbols")
+    @field:Size(min = 8, message = "Password length should contains at least 8 symbols")
     val password : String,
 )
 
