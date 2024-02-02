@@ -2,7 +2,6 @@ package io.github.e1turin.itmochan.controller
 
 import io.github.e1turin.itmochan.entity.ThreadCommentDTO
 import io.github.e1turin.itmochan.response.ThreadComments
-import io.github.e1turin.itmochan.response.ThreadId
 import io.github.e1turin.itmochan.response.ThreadInitComment
 import io.github.e1turin.itmochan.service.ThreadService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -35,7 +34,7 @@ class ThreadController(
     fun addThread(
         @RequestBody thread: ThreadCommentDTO,
         @AuthenticationPrincipal userDetails: UserDetails,
-    ): ThreadId {
-        return ThreadId(threadService.addThread(thread, userDetails.username))
+    ): ThreadInitComment {
+        return threadService.addThread(thread, userDetails.username)
     }
 }

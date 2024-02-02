@@ -12,7 +12,3 @@ data class ThreadInitComment(
     val thread: Thread,
     val initComment: Comment?,
 )
-
-data class ThreadId(
-    val threadId: Long,
-)

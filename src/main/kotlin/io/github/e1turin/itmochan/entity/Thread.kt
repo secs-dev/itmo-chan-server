@@ -15,6 +15,6 @@ data class ThreadDTO(
 )
 
 data class ThreadCommentDTO(
-    val threadDTO : ThreadDTO,
-    val commentDTO: CommentDTO,
+    val thread : ThreadDTO,
+    val initComment: CommentDTO,
 )

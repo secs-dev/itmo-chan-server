@@ -8,6 +8,7 @@ import io.github.e1turin.itmochan.response.ThreadComments
 import io.github.e1turin.itmochan.response.ThreadInitComment
 import io.github.e1turin.itmochan.security.exception.NoSuchThreadException
 import org.springframework.stereotype.Service
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class ThreadService(
@@ -15,7 +16,7 @@ class ThreadService(
     private val commentService: CommentService,
 ) {
     fun getThreadsByTopicId(topicId: Long): List<Thread> {
-        return threadRepository.findAllByTopicId(topicId)
+        return threadRepository.findAllByTopicId(topicId) //TODO add offset and limit
     }
 
     fun getThreadByThreadId(threadId: Long): Thread {
@@ -41,10 +42,12 @@ class ThreadService(
         return ThreadComments(thread, comments)
     }
 
-    fun addThread(threadCommentDTO: ThreadCommentDTO, username: String): Long {
-        val threadId = threadRepository.saveThread(threadCommentDTO.threadDTO.topicId)
-        val commentId = commentService.addComment(threadCommentDTO.commentDTO.copy(threadId = threadId), username)
+    fun addThread(threadCommentDTO: ThreadCommentDTO, username: String): ThreadInitComment {
+        val threadId = threadRepository.saveThread(threadCommentDTO.thread.topicId)
+        val commentId = commentService.addComment(threadCommentDTO.initComment.copy(threadId = threadId), username)
         threadRepository.setInitCommentId(threadId, commentId)
-        return threadId
+        return ThreadInitComment(
+            threadRepository.findThreadByThreadId(threadId).get(),
+            commentService.getComment(commentId))
     }
 }
