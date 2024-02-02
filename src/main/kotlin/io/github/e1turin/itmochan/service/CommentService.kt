@@ -3,6 +3,7 @@ package io.github.e1turin.itmochan.service
 import io.github.e1turin.itmochan.entity.Comment
 import io.github.e1turin.itmochan.entity.CommentDTO
 import io.github.e1turin.itmochan.repository.CommentRepository
+import io.github.e1turin.itmochan.security.exception.NoRightsException
 import io.github.e1turin.itmochan.security.exception.NoSuchCommentException
 import org.springframework.stereotype.Service
 
@@ -24,5 +25,13 @@ class CommentService(
     }
     fun getCommentsByThreadId(threadId: Long, offset: Long, limit: Long) : List<Comment> {
         return commentRepository.findCommentsByThreadId(threadId, offset, limit)
+    }
+
+    fun deleteComment(commentId: Long, username: String) {
+        val comment = getComment(commentId)
+        val user = userService.findUserByUsername(username)
+        if (comment.userId != user.userId)
+            throw NoRightsException("You have no rights to delete this comment")
+        commentRepository.setDeleted(commentId, true)
     }
 }

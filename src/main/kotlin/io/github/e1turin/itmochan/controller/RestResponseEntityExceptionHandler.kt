@@ -32,7 +32,7 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         val bodyOfResponse = wrapErrorToJson(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.message!!)
         return handleExceptionInternal(
             ex, bodyOfResponse,
-            HttpHeaders(), HttpStatus.BAD_REQUEST, request
+            HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request
         )
     }
 
@@ -66,6 +66,17 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         return handleExceptionInternal(
             ex, bodyOfResponse,
             HttpHeaders(), HttpStatus.NOT_FOUND, request
+        )
+    }
+
+    @ExceptionHandler(value = [NoRightsException::class])
+    protected fun handleNoRightsError(
+        ex: RuntimeException, request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.FORBIDDEN.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.FORBIDDEN, request
         )
     }
 }

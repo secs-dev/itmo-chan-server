@@ -1,6 +1,7 @@
 package io.github.e1turin.itmochan.repository
 
 import io.github.e1turin.itmochan.entity.Comment
+import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
@@ -24,4 +25,12 @@ interface CommentRepository : CrudRepository<Comment, Long>, PagingAndSortingRep
         @Param("content") content : String,
         @Param("user_id") userId : Long,
     ) : Long
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE \"Comments\" SET deleted = :deleted WHERE comment_id = :comment_id")
+    fun setDeleted(
+        @Param("comment_id") commentId: Long,
+        @Param("deleted") deleted: Boolean,
+    )
 }
