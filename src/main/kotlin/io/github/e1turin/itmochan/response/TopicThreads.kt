@@ -5,5 +5,5 @@ import io.github.e1turin.itmochan.entity.Topic
 
 data class TopicThreads(
     val topic: Topic,
-    val threads: List<Thread>
+    val threads: List<Thread>,
 )

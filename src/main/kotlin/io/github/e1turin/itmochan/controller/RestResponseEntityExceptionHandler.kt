@@ -46,4 +46,26 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
             HttpHeaders(), HttpStatus.NOT_FOUND, request
         )
     }
+
+    @ExceptionHandler(value = [NoSuchCommentException::class])
+    protected fun handleCommentError(
+        ex: RuntimeException, request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.NOT_FOUND.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.NOT_FOUND, request
+        )
+    }
+
+    @ExceptionHandler(value = [NoSuchThreadException::class])
+    protected fun handleThreadError(
+        ex: RuntimeException, request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.NOT_FOUND.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.NOT_FOUND, request
+        )
+    }
 }

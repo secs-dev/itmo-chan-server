@@ -13,3 +13,8 @@ data class Thread(
 data class ThreadDTO(
     val topicId : Long,
 )
+
+data class ThreadCommentDTO(
+    val threadDTO : ThreadDTO,
+    val commentDTO: CommentDTO,
+)

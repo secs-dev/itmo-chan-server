@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.DefaultSecurityFilterChain
-import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
@@ -32,6 +31,9 @@ class SecurityConfiguration(
                     .requestMatchers(HttpMethod.DELETE, "api/topic/**").permitAll()
                     .requestMatchers(HttpMethod.PUT, "/api/topic").permitAll()
                     .requestMatchers(HttpMethod.GET, "api/topic/**").permitAll()
+                    .requestMatchers(HttpMethod.PUT, "/api/thread").hasRole("GUEST")
+                    .requestMatchers(HttpMethod.GET, "api/thread/*/comments").permitAll()
+                    .requestMatchers(HttpMethod.GET, "api/thread/*").permitAll()
                     .requestMatchers("/api/admin").hasRole("ADMIN")
                     .requestMatchers("/**").hasRole("USER")
                     .anyRequest().denyAll()

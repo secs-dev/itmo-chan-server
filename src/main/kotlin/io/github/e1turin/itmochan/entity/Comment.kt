@@ -10,7 +10,7 @@ data class Comment(
     val title : String?,
     val content : String,
     val userId : Long,
-    val reactionId : Long,
+    val reactionsId : Long,
     val creationDate : LocalDateTime,
     val trashed : Boolean,
     val deleted : Boolean,
@@ -26,5 +26,4 @@ data class CommentDTO(
     val threadId : Long,
     val title : String?,
     val content : String,
-    val userId : Long,
 )
