@@ -28,8 +28,8 @@ CREATE TABLE IF NOT EXISTS "Comments" (
 
 CREATE TABLE IF NOT EXISTS  "Replies" (
                            comment_id integer NOT NULL,
-                           repply_comment_id integer NOT NULL,
-                           PRIMARY KEY (comment_id, repply_comment_id)
+                           reply_comment_id integer NOT NULL,
+                           PRIMARY KEY (comment_id, reply_comment_id)
 );
 
 CREATE TABLE IF NOT EXISTS  "Threads" (
@@ -145,7 +145,7 @@ ALTER TABLE "Replies"
         ON DELETE NO ACTION;
 
 ALTER TABLE "Replies"
-    ADD FOREIGN KEY (repply_comment_id)
+    ADD FOREIGN KEY (reply_comment_id)
         REFERENCES "Comments" (comment_id)
         ON DELETE NO ACTION;
 
