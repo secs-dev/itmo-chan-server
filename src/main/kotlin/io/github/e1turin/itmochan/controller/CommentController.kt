@@ -13,9 +13,9 @@ class CommentController(
     private val commentService: CommentService
 ) {
 
-    @PutMapping
+    @PostMapping
     fun addComment(
-        @RequestBody comment: CommentDTO,
+        @RequestPart("comment") comment: CommentDTO,
         @AuthenticationPrincipal userDetails: UserDetails,
     ): CommentId {
         return CommentId(commentService.addComment(comment, userDetails.username))

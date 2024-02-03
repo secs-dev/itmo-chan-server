@@ -34,6 +34,8 @@ class SecurityConfiguration(
                     .requestMatchers(HttpMethod.PUT, "/api/thread").hasRole("GUEST")
                     .requestMatchers(HttpMethod.GET, "api/thread/*/comments").permitAll()
                     .requestMatchers(HttpMethod.GET, "api/thread/*").permitAll()
+                    .requestMatchers(HttpMethod.POST, "api/comment").hasRole("GUEST")
+                    .requestMatchers(HttpMethod.DELETE, "api/comment/*").hasRole("GUEST")
                     .requestMatchers("/api/admin").hasRole("ADMIN")
                     .requestMatchers("/**").hasRole("USER")
                     .anyRequest().denyAll()
