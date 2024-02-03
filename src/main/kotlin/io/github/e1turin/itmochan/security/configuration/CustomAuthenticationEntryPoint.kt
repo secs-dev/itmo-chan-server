@@ -29,7 +29,7 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
                 response,
             )
 
-            else -> {
+            else -> { //TODO fix catching DB exceptions. Suggest: fix at service side
                 includeErrorToHttpResponse(
                     HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "Something went wrong!\nPlease contact with admin",
