@@ -16,8 +16,10 @@ spring:
       schema-locations: classpath:sql/schema.sql
       data-locations: classpath:sql/data.sql
       mode: always
+  servlet.multipart:
+    max-file-size: 5MB
+    max-request-size: 5MB
 jwt:
   key: TEMP_JWT_KEY_SHOULD_BE_CHANGED_AND_MOVED_TO_ENVIRONMENT #TODO
   access-token-expiration: 3600000
   refresh-token-expiration: 86400000 #TODO UNUSED
-
