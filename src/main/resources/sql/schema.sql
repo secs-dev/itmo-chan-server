@@ -282,18 +282,18 @@ WHERE comment_id = throw_in_trash.comment_id;
    CALL throw_in_trash(5, 'You made a mistake when wrote there smth');
 */
 
-CREATE OR REPLACE PROCEDURE vote_in_poll(user_id integer, poll_id integer, answer_ids integer[])
+CREATE OR REPLACE PROCEDURE vote_in_poll(user_id_arg bigint, poll_id_arg bigint, answer_ids_arg bigint[])
 AS '
     DECLARE
-answer int;
+answer bigint;
 BEGIN
-        FOREACH answer IN ARRAY answer_ids
+        FOREACH answer IN ARRAY answer_ids_arg
         LOOP
 UPDATE "Poll_answers"
 SET votes_number = votes_number + 1
-WHERE poll_answer_id = answer AND poll_id = vote_in_poll.poll_id;
+WHERE poll_answer_id = answer AND poll_id = poll_id_arg;
 END LOOP;
-INSERT INTO "Voted_users"(poll_id, user_id) VALUES(poll_id, user_id);
+INSERT INTO "Voted_users"(poll_id, user_id) VALUES(poll_id_arg, user_id_arg);
 END;
 ' LANGUAGE PLPGSQL;
 
