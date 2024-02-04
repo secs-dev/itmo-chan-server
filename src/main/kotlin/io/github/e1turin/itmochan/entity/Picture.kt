@@ -1,13 +1,13 @@
 package io.github.e1turin.itmochan.entity
 
 import org.springframework.data.relational.core.mapping.Table
-import java.io.File
 
-//@Table("Pictures")
+@Table("Pictures")
 data class Picture(
     val pictureId : Long,
     val name : String,
-    val file : File,
+    val contentType : String,
+    val fileOid : Long,
 )
 
 @Table("Picture_attachments")

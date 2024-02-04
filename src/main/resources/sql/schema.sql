@@ -59,8 +59,9 @@ CREATE TABLE IF NOT EXISTS  "Reaction_sets" (
 
 CREATE TABLE IF NOT EXISTS  "Pictures" (
                             picture_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                            name varchar(255),
-                            file oid NOT NULL
+                            name varchar(255) NOT NULL,
+                            content_type varchar(255) NOT NULL,
+                            file_oid oid NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS  "Picture_attachments" (
@@ -71,8 +72,9 @@ CREATE TABLE IF NOT EXISTS  "Picture_attachments" (
 
 CREATE TABLE IF NOT EXISTS  "Videos" (
                           video_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                          name varchar(255),
-                          file oid NOT NULL
+                          name varchar(255) NOT NULL,
+                          content_type varchar(255) NOT NULL,
+                          file_oid oid NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS  "Video_attachments" (
@@ -121,7 +123,7 @@ ALTER TABLE "Users"
         CHECK (isu_id > 0);
 
 /* Comments */
-
+/*TODO FIX ADD FK WITH VALIDATION THAN DOESN'T EXISTS*/
 ALTER TABLE "Comments"
     ADD FOREIGN KEY (reactions_id)
         REFERENCES "Reaction_sets" (r_set_id)

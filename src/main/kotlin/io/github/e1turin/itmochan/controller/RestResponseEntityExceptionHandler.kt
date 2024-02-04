@@ -79,4 +79,26 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
             HttpHeaders(), HttpStatus.FORBIDDEN, request
         )
     }
+
+    @ExceptionHandler(value = [StorageException::class, MaxCountFilesException::class, UnsupportableFileTypeException::class])
+    protected fun handleStorageError(
+        ex: RuntimeException, request: WebRequest,
+    ) : ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.BAD_REQUEST.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.BAD_REQUEST, request
+        )
+    }
+
+    @ExceptionHandler(value = [FileNotFoundException::class])
+    protected fun handleFileNotFoundError(
+        ex: RuntimeException, request: WebRequest,
+    ) : ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.NOT_FOUND.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.NOT_FOUND, request
+        )
+    }
 }
