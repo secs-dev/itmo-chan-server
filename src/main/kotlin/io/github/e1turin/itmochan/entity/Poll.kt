@@ -1,5 +1,6 @@
 package io.github.e1turin.itmochan.entity
 
+import jakarta.validation.constraints.Size
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("Polls")
@@ -25,8 +26,6 @@ data class PollAnswer(
 
 data class PollDTO(
     val title : String,
-)
-
-data class PollAnswerDTO(
-    val answerTitle : String,
+    @field:Size(min = 1, max = 10)
+    val answers : List<String>,
 )
