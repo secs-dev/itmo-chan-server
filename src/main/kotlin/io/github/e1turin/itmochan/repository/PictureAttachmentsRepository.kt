@@ -15,4 +15,6 @@ interface PictureAttachmentsRepository : CrudRepository<PictureAttachments, Long
         @Param("picture_id") pictureId: Long,
     )
 
+    fun findPictureAttachmentsByCommentId(commentId: Long) : List<PictureAttachments>
+
 }

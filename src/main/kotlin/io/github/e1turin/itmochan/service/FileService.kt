@@ -44,4 +44,10 @@ class FileService(
             videoService.saveVideoAttachment(commentId, it)
         }
     }
+
+    fun getFilesIdsAttachedToComment(commentId: Long) : FilesIds {
+        val picturesIds = pictureService.getPictureIdsByCommentId(commentId)
+        val videosIds = videoService.getVideoIdsByCommentId(commentId)
+        return FilesIds(picturesIds, videosIds)
+    }
 }

@@ -84,4 +84,9 @@ class PictureService(
             throw StorageException("Deletion error") //todo make db exception with 500 code
         }
     }
+
+    fun getPictureIdsByCommentId(commentId: Long) : List<Long> {
+        val pictureAttachments = pictureAttachmentsRepository.findPictureAttachmentsByCommentId(commentId)
+        return pictureAttachments.map { it.pictureId }
+    }
 }

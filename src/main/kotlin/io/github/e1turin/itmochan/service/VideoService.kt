@@ -84,4 +84,9 @@ class VideoService(
             throw StorageException("Deletion error") //todo make db exception with 500 code
         }
     }
+
+    fun getVideoIdsByCommentId(commentId: Long) : List<Long> {
+        val videoAttachments = videoAttachmentsRepository.findVideoAttachmentsByCommentId(commentId)
+        return videoAttachments.map { it.videoId }
+    }
 }

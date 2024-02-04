@@ -15,4 +15,6 @@ interface VideoAttachmentsRepository : CrudRepository<VideoAttachments, Long> {
         @Param("video_id") videoId: Long,
     )
 
+    fun findVideoAttachmentsByCommentId(commentId: Long) : List<VideoAttachments>
+
 }
