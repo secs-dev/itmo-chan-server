@@ -1,6 +1,6 @@
 package io.github.e1turin.itmochan.security.service
 import io.github.e1turin.itmochan.repository.UserRepository
-import io.github.e1turin.itmochan.security.exception.NoSuchUsernameException
+import io.github.e1turin.itmochan.exception.NoSuchUsernameException
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService

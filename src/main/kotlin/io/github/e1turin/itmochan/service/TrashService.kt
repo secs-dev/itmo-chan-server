@@ -3,8 +3,8 @@ package io.github.e1turin.itmochan.service
 import io.github.e1turin.itmochan.entity.Trash
 import io.github.e1turin.itmochan.entity.TrashDTO
 import io.github.e1turin.itmochan.repository.TrashRepository
-import io.github.e1turin.itmochan.security.exception.AlreadyTrashedException
-import io.github.e1turin.itmochan.security.exception.NoSuchTrashException
+import io.github.e1turin.itmochan.exception.AlreadyTrashedException
+import io.github.e1turin.itmochan.exception.NoSuchTrashException
 import org.springframework.stereotype.Service
 
 @Service

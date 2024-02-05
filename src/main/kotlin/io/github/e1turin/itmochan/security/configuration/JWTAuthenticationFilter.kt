@@ -1,6 +1,6 @@
 package io.github.e1turin.itmochan.security.configuration
 
-import io.github.e1turin.itmochan.security.exception.WrongUsernameException
+import io.github.e1turin.itmochan.exception.WrongUsernameException
 import io.github.e1turin.itmochan.security.service.CustomUserDetailsService
 import io.github.e1turin.itmochan.security.service.TokenService
 import io.github.e1turin.itmochan.utils.includeErrorToHttpResponse

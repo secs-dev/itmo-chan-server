@@ -6,7 +6,7 @@ import io.github.e1turin.itmochan.entity.ThreadCommentDTO
 import io.github.e1turin.itmochan.repository.ThreadRepository
 import io.github.e1turin.itmochan.response.ThreadComments
 import io.github.e1turin.itmochan.response.ThreadInitComment
-import io.github.e1turin.itmochan.security.exception.NoSuchThreadException
+import io.github.e1turin.itmochan.exception.NoSuchThreadException
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 

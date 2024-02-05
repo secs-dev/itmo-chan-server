@@ -4,8 +4,8 @@ import io.github.e1turin.itmochan.repository.FileRepository
 import io.github.e1turin.itmochan.repository.VideoAttachmentsRepository
 import io.github.e1turin.itmochan.repository.VideoRepository
 import io.github.e1turin.itmochan.response.VideoDTO
-import io.github.e1turin.itmochan.security.exception.FileNotFoundException
-import io.github.e1turin.itmochan.security.exception.StorageException
+import io.github.e1turin.itmochan.exception.FileNotFoundException
+import io.github.e1turin.itmochan.exception.StorageException
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.File

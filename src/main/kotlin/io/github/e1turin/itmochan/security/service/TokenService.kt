@@ -1,7 +1,7 @@
 package io.github.e1turin.itmochan.security.service
 
 import io.github.e1turin.itmochan.security.configuration.JWTProperties
-import io.github.e1turin.itmochan.security.exception.WrongUsernameException
+import io.github.e1turin.itmochan.exception.WrongUsernameException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys

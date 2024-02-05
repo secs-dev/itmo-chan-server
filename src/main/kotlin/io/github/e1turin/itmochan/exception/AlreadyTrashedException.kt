@@ -1,3 +1,3 @@
-package io.github.e1turin.itmochan.security.exception
+package io.github.e1turin.itmochan.exception
 
 class AlreadyTrashedException(message : String) : IllegalArgumentException(message)

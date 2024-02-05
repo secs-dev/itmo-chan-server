@@ -4,7 +4,7 @@ import io.github.e1turin.itmochan.entity.Thread
 import io.github.e1turin.itmochan.entity.TopicDTO
 import io.github.e1turin.itmochan.repository.TopicRepository
 import io.github.e1turin.itmochan.response.TopicThreads
-import io.github.e1turin.itmochan.security.exception.NoSuchTopicException
+import io.github.e1turin.itmochan.exception.NoSuchTopicException
 import org.springframework.stereotype.Service
 
 @Service

@@ -5,9 +5,9 @@ import io.github.e1turin.itmochan.repository.PollAnswerRepository
 import io.github.e1turin.itmochan.repository.PollRepository
 import io.github.e1turin.itmochan.repository.VotedUsersRepository
 import io.github.e1turin.itmochan.response.PollResponse
-import io.github.e1turin.itmochan.security.exception.EmptyAnswersListException
-import io.github.e1turin.itmochan.security.exception.NoSuchPollException
-import io.github.e1turin.itmochan.security.exception.UserAlreadyVotedException
+import io.github.e1turin.itmochan.exception.EmptyAnswersListException
+import io.github.e1turin.itmochan.exception.NoSuchPollException
+import io.github.e1turin.itmochan.exception.UserAlreadyVotedException
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,6 +1,6 @@
 package io.github.e1turin.itmochan.controller
 
-import io.github.e1turin.itmochan.security.exception.*
+import io.github.e1turin.itmochan.exception.*
 import io.github.e1turin.itmochan.utils.wrapErrorToJson
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus

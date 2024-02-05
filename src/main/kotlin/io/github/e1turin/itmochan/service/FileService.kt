@@ -1,8 +1,8 @@
 package io.github.e1turin.itmochan.service
 
 import io.github.e1turin.itmochan.entity.FilesIds
-import io.github.e1turin.itmochan.security.exception.MaxCountFilesException
-import io.github.e1turin.itmochan.security.exception.UnsupportableFileTypeException
+import io.github.e1turin.itmochan.exception.MaxCountFilesException
+import io.github.e1turin.itmochan.exception.UnsupportableFileTypeException
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 

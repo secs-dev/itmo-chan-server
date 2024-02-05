@@ -4,8 +4,8 @@ import io.github.e1turin.itmochan.entity.UserAuth
 import io.github.e1turin.itmochan.entity.UserRegister
 import io.github.e1turin.itmochan.security.configuration.JWTProperties
 import io.github.e1turin.itmochan.response.AuthenticationResponse
-import io.github.e1turin.itmochan.security.exception.DuplicatedUsernameException
-import io.github.e1turin.itmochan.security.exception.NoSuchUsernameException
+import io.github.e1turin.itmochan.exception.DuplicatedUsernameException
+import io.github.e1turin.itmochan.exception.NoSuchUsernameException
 import io.github.e1turin.itmochan.service.UserService
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

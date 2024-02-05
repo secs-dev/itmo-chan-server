@@ -2,7 +2,7 @@ package io.github.e1turin.itmochan.service
 
 import io.github.e1turin.itmochan.entity.*
 import io.github.e1turin.itmochan.repository.UserRepository
-import io.github.e1turin.itmochan.security.exception.NoSuchUsernameException
+import io.github.e1turin.itmochan.exception.NoSuchUsernameException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 

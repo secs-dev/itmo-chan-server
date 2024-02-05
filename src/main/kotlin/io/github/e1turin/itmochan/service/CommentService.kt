@@ -3,8 +3,8 @@ package io.github.e1turin.itmochan.service
 import io.github.e1turin.itmochan.entity.Comment
 import io.github.e1turin.itmochan.entity.CommentDTO
 import io.github.e1turin.itmochan.repository.CommentRepository
-import io.github.e1turin.itmochan.security.exception.NoRightsException
-import io.github.e1turin.itmochan.security.exception.NoSuchCommentException
+import io.github.e1turin.itmochan.exception.NoRightsException
+import io.github.e1turin.itmochan.exception.NoSuchCommentException
 import org.springframework.stereotype.Service
 
 @Service
