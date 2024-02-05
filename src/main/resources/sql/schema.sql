@@ -270,7 +270,7 @@ END;
   call append_reaction_to_comment('tl;dr',  15) 
 */
 
-CREATE OR REPLACE PROCEDURE throw_in_trash(comment_id integer, reason text)
+CREATE OR REPLACE PROCEDURE throw_in_trash(comment_id bigint, reason text)
 AS '
     INSERT INTO "Trash"(comment_id, reason) VALUES(comment_id, reason);
 UPDATE "Comments"
@@ -354,7 +354,7 @@ UPDATE "Comments"
 SET deleted = true
 WHERE comment_id IN
       (SELECT comment_id FROM "Trash"
-       WHERE recycle_date < NOW() - INTERVAL ''1 hour'');
+       WHERE recycle_date < NOW() - INTERVAL $$1 hour$$);
 RETURN NEW;
 END;
 ' LANGUAGE PLPGSQL;
