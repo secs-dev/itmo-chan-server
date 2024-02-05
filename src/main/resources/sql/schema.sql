@@ -236,11 +236,11 @@ ALTER TABLE "Poll_answers"
 
 /* functions */
 
-CREATE OR REPLACE PROCEDURE append_reaction_to_comment(reaction_text varchar, c_id Integer)
+CREATE OR REPLACE PROCEDURE append_reaction_to_comment(reaction_text varchar, c_id bigint)
 AS '
     DECLARE
-r_id Integer;
-        r_cnt Integer;
+r_id bigint;
+        r_cnt bigint;
 BEGIN
         IF length(reaction_text) < 7 THEN
 SELECT reactions_id
@@ -261,7 +261,7 @@ UPDATE "Reaction_sets"
 SET reactions = jsonb_set(reactions, array[reaction_text], to_jsonb(r_cnt + 1), TRUE)
 WHERE r_set_id = r_id;
 ELSE
-            RAISE EXCEPTION ''Reaction is too long'';
+            RAISE EXCEPTION $$Reaction is too long$$;
 END IF;
 END;
 ' LANGUAGE PLPGSQL;

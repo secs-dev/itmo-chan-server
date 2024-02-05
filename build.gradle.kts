@@ -28,7 +28,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	runtimeOnly("org.postgresql:postgresql")
+	implementation("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	//spring security
 	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
