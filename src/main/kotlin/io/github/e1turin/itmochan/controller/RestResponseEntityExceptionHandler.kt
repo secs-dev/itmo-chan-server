@@ -101,4 +101,15 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
             HttpHeaders(), HttpStatus.NOT_FOUND, request
         )
     }
+
+    @ExceptionHandler(value = [EmptyAnswersListException::class, UserAlreadyVotedException::class, NoSuchPollException::class])
+    protected fun handlePollsError(
+        ex: RuntimeException, request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.BAD_REQUEST.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.BAD_REQUEST, request
+        )
+    }
 }
