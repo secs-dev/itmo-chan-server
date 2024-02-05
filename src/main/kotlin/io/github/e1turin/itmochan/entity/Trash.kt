@@ -11,3 +11,8 @@ data class Trash(
     val recycleDate : LocalDateTime,
 )
 
+data class TrashDTO(
+    val commentId: Long,
+    val reason: String?,
+)
+

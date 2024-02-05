@@ -123,4 +123,26 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
             HttpHeaders(), HttpStatus.NOT_FOUND, request
         )
     }
+
+    @ExceptionHandler(value = [NoSuchTrashException::class])
+    protected fun handleNoTrashError(
+        ex: RuntimeException, request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.NOT_FOUND.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.NOT_FOUND, request
+        )
+    }
+
+    @ExceptionHandler(value = [AlreadyTrashedException::class])
+    protected fun handleAlreadyTrashedError(
+        ex: RuntimeException, request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.BAD_REQUEST.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.BAD_REQUEST, request
+        )
+    }
 }
