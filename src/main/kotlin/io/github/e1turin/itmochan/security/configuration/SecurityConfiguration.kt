@@ -40,6 +40,8 @@ class SecurityConfiguration(
                     .requestMatchers(HttpMethod.DELETE, "api/media/**").hasRole("MODERATOR")
                     .requestMatchers(HttpMethod.GET, "/api/poll/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/poll/*").hasRole("GUEST")
+                    .requestMatchers(HttpMethod.POST, "/api/reactions").hasRole("GUEST")
+                    .requestMatchers(HttpMethod.GET, "/api/reactions/**").permitAll()
                     .requestMatchers("/api/admin").hasRole("ADMIN")
                     .requestMatchers("/**").hasRole("USER")
                     .anyRequest().denyAll()

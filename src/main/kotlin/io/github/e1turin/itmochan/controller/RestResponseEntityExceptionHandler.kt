@@ -112,4 +112,15 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
             HttpHeaders(), HttpStatus.BAD_REQUEST, request
         )
     }
+
+    @ExceptionHandler(value = [NoSuchReactionsException::class])
+    protected fun handleNoReactionsError(
+        ex: RuntimeException, request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val bodyOfResponse = wrapErrorToJson(HttpStatus.NOT_FOUND.value(), ex.message!!)
+        return handleExceptionInternal(
+            ex, bodyOfResponse,
+            HttpHeaders(), HttpStatus.NOT_FOUND, request
+        )
+    }
 }
