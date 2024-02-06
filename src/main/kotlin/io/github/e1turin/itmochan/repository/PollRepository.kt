@@ -17,4 +17,6 @@ interface PollRepository : CrudRepository<Poll, Long> {
     ) : Long
 
     fun findPollByPollId(pollId : Long) : Optional<Poll>
+
+    fun findPollByCommentId(commentId: Long) : Optional<Poll>
 }

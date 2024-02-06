@@ -7,11 +7,17 @@ import org.springframework.stereotype.Service
 class ReplyService(
    private val replyRepository: ReplyRepository,
 ) {
-    fun saveReplies(
+    fun saveRepliesTo(
         commentId : Long,
-        repliesIds : List<Long>,
+        repliesToIds : List<Long>,
     ) {
-        repliesIds.parallelStream().forEach { replyRepository.saveReply(commentId, it) }
+        repliesToIds.parallelStream().forEach {
+            try {
+                replyRepository.saveReply(it, commentId)
+            } catch (_ : Exception) {
+                //Skip of non-existed replied comment id
+            }
+        }
     }
 
     fun getCommentsIdsWhomReplied(

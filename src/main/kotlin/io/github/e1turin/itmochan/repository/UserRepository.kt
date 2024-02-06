@@ -13,6 +13,8 @@ interface UserRepository : CrudRepository<User, Long> {
 
     fun findUserByUsername(username: String) : Optional<User>
 
+    fun findUserByUserId(userId : Long) : Optional<User>
+
     @Transactional
     @Modifying
     @Query("INSERT INTO \"Users\"(username, isu_id, password) VALUES (:username, :isu_id, :password)")

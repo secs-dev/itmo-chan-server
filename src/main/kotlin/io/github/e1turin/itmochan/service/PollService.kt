@@ -56,4 +56,11 @@ class PollService (
             throw EmptyAnswersListException("No answers for this poll was found")
         return PollResponse(poll.get(), answers)
     }
+
+    fun getPollIdByCommentId(commentId: Long): Long {
+        val poll = pollRepository.findPollByCommentId(commentId)
+        if (poll.isEmpty)
+            throw NoSuchPollException("No such poll was found")
+        return poll.get().pollId
+    }
 }

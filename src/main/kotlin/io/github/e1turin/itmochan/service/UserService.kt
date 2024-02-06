@@ -21,6 +21,13 @@ class UserService(
         return usernameFound.get()
     }
 
+    fun findUserByUserId(userId: Long) : User {
+        val usernameFound = userRepository.findUserByUserId(userId)
+        if (usernameFound.isEmpty)
+            throw NoSuchUsernameException("User '$userId' doesn't exists")
+        return usernameFound.get()
+    }
+
     fun save(user : UserRegister) {
         userRepository.saveUser(user.username, user.isuId, encoder.encode(user.password))
     }

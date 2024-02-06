@@ -5,12 +5,17 @@ import io.github.e1turin.itmochan.entity.CommentDTO
 import io.github.e1turin.itmochan.repository.CommentRepository
 import io.github.e1turin.itmochan.exception.NoRightsException
 import io.github.e1turin.itmochan.exception.NoSuchCommentException
+import io.github.e1turin.itmochan.exception.NoSuchPollException
+import io.github.e1turin.itmochan.response.CommentResponse
 import org.springframework.stereotype.Service
 
 @Service
 class CommentService(
     private val commentRepository : CommentRepository,
     private val userService: UserService,
+    private val replyService: ReplyService,
+    private val fileService: FileService,
+    private val pollService: PollService,
 ) {
     fun addComment(commentDTO : CommentDTO, username: String) : Long {
         val userId = userService.findUserByUsername(username).userId
@@ -22,6 +27,27 @@ class CommentService(
         if (comment.isEmpty)
             throw NoSuchCommentException("Comment $commentId doesn't exists")
         return comment.get()
+    }
+
+    fun getCommentResponse(commentId: Long) : CommentResponse {
+        val comment = getComment(commentId)
+        val username = userService.findUserByUserId(comment.userId)
+        val replies = replyService.getRepliesToComment(commentId)
+        val repliedTo = replyService.getCommentsIdsWhomReplied(commentId)
+        val filesIds = fileService.getFilesIdsAttachedToComment(commentId)
+        val pollId : Long? = try {
+            pollService.getPollIdByCommentId(commentId)
+        } catch (_ : NoSuchPollException) {
+            null
+        }
+        return CommentResponse(
+            comment,
+            username.username,
+            replies,
+            repliedTo,
+            filesIds,
+            pollId,
+        )
     }
     fun getCommentsByThreadId(threadId: Long, offset: Long, limit: Long) : List<Comment> {
         return commentRepository.findCommentsByThreadId(threadId, offset, limit)

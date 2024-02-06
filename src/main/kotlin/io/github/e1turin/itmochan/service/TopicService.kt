@@ -1,6 +1,5 @@
 package io.github.e1turin.itmochan.service
 
-import io.github.e1turin.itmochan.entity.Thread
 import io.github.e1turin.itmochan.entity.TopicDTO
 import io.github.e1turin.itmochan.repository.TopicRepository
 import io.github.e1turin.itmochan.response.TopicThreads
