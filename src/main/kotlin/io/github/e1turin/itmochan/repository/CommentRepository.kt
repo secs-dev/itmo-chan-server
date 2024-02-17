@@ -16,7 +16,7 @@ interface CommentRepository : CrudRepository<Comment, Long>, PagingAndSortingRep
     fun findCommentsByThreadId(
         @Param("thread_id") threadId: Long,
         @Param("offset") offset: Long,
-        @Param("limit") limit: Long): List<Comment>
+        @Param("limit") limit: Long?): List<Comment>
     @Transactional
     @Query("INSERT INTO \"Comments\"(thread_id, title, content, user_id) VALUES (:thread_id, CAST(:title AS TEXT), CAST(:content AS TEXT), :user_id) RETURNING comment_id")
     fun saveComment(

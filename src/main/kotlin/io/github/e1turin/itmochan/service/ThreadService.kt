@@ -34,7 +34,7 @@ class ThreadService(
         return ThreadInitComment(thread, initComment)
     }
 
-    fun getThreadComments(threadId: Long, offset: Long, limit: Long) : ThreadComments {
+    fun getThreadComments(threadId: Long, offset: Long, limit: Long?) : ThreadComments {
         val thread = getThreadByThreadId(threadId)
         val comments = commentService.getCommentsByThreadId(threadId, offset, limit)
         val commentsResponse = comments.map {

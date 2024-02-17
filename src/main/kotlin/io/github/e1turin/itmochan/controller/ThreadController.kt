@@ -7,12 +7,11 @@ import io.github.e1turin.itmochan.response.ThreadComments
 import io.github.e1turin.itmochan.response.ThreadInitComment
 import io.github.e1turin.itmochan.service.ThreadService
 import jakarta.validation.Valid
+import jakarta.validation.constraints.Min
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-
-const val STANDARD_LIMIT = 5L
 
 @RestController
 @RequestMapping("/api/thread")
@@ -31,8 +30,9 @@ class ThreadController(
     fun getThreadComments(
         @PathVariable("threadId") threadId: Long,
         offset: Long?,
+        @Min(0) limit: Long?,
     ): ThreadComments {
-        return threadService.getThreadComments(threadId, offset ?: 0, STANDARD_LIMIT)
+        return threadService.getThreadComments(threadId, offset ?: 0, limit)
     }
 
     @PostMapping

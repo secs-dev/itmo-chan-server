@@ -49,7 +49,7 @@ class CommentService(
             pollId,
         )
     }
-    fun getCommentsByThreadId(threadId: Long, offset: Long, limit: Long) : List<Comment> {
+    fun getCommentsByThreadId(threadId: Long, offset: Long, limit: Long?) : List<Comment> {
         return commentRepository.findCommentsByThreadId(threadId, offset, limit)
     }
 
