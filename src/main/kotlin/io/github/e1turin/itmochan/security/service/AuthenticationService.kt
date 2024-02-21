@@ -82,7 +82,8 @@ class AuthenticationService(
     }
     private fun createAccessToken(user: UserDetails) = tokenService.generate(
         userDetails = user,
-        expirationDate = getAccessTokenExpiration()
+        expirationDate = getAccessTokenExpiration(),
+        additionalClaims = mapOf(Pair("authorities", user.authorities.map{it.authority}))
     )
     private fun getAccessTokenExpiration(): Date =
         Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration)
