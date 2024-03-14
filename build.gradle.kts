@@ -8,7 +8,7 @@ plugins {
 	kotlin("plugin.jpa") version "1.9.20"
 }
 
-group = "io.github.e1turin"
+group = "io.github.secsdev"
 version = "0.0.1-SNAPSHOT"
 
 java {
