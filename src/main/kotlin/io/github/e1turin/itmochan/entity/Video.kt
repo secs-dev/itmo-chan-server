@@ -1,15 +1,18 @@
 package io.github.e1turin.itmochan.entity
 
-import java.io.File
+import org.springframework.data.relational.core.mapping.Table
 
+@Table("Videos")
 data class Video(
-    val videoId : Int,
+    val videoId : Long,
     val name : String,
-    val file : File,
+    val contentType : String,
+    val fileOid : Long,
 )
 
+@Table("Video_attachments")
 data class VideoAttachments(
-    val commentId : Int,
-    val videoId : Int,
+    val commentId : Long,
+    val videoId : Long,
 )
 

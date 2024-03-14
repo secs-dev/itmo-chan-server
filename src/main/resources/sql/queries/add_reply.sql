@@ -17,6 +17,6 @@ with c1 as (
     ) as u
     returning comment_id as id
 )
-insert into "Replies" (comment_id, repply_comment_id)
+insert into "Replies" (comment_id, reply_comment_id)
 select c1.id, c2.id
 from c1, c2;

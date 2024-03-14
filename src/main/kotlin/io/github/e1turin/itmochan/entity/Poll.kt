@@ -1,27 +1,31 @@
 package io.github.e1turin.itmochan.entity
 
+import jakarta.validation.constraints.Size
+import org.springframework.data.relational.core.mapping.Table
+
+@Table("Polls")
 data class Poll(
-    val pollId : Int,
-    val commentId : Int,
+    val pollId : Long,
+    val commentId : Long,
     val title : String,
 )
 
+@Table("Voted_users")
 data class VotedUsers(
-    val pollId : Int,
-    val userId : Int,
+    val pollId : Long,
+    val userId : Long,
 )
 
+@Table("Poll_answers")
 data class PollAnswer(
-    val pollAnswerId : Int,
-    val pollId : Int,
+    val pollAnswerId : Long,
+    val pollId : Long,
     val answerTitle : String,
     val votesNumber : Int,
 )
 
 data class PollDTO(
     val title : String,
-)
-
-data class PollAnswerDTO(
-    val answerTitle : String,
+    @field:Size(min = 1, max = 10)
+    val answers : List<String>,
 )

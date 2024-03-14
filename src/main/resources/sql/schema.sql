@@ -3,18 +3,18 @@
 CREATE TABLE IF NOT EXISTS "Users" (
                          user_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                          username varchar(255) NOT NULL UNIQUE,
-                         isu_id integer NOT NULL UNIQUE,
-                         role_id integer DEFAULT NULL,
+                         isu_id integer NULL UNIQUE,
+                         permissions integer NOT NULL DEFAULT 1, -- permissions is sum of roles id -- TODO Maybe future problem with max int postgres (31 roles) but it looks pretty nice as for me if change to bigint
                          password varchar(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS  "Roles" (
-                         role_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE IF NOT EXISTS "Roles" (
+                         role_id integer PRIMARY KEY,
                          name varchar(255) NOT NULL UNIQUE,
                          description text NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS  "Comments" (
+CREATE TABLE IF NOT EXISTS "Comments" (
                             comment_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                             thread_id integer NOT NULL,
                             title varchar(255),
@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS  "Comments" (
 
 CREATE TABLE IF NOT EXISTS  "Replies" (
                            comment_id integer NOT NULL,
-                           repply_comment_id integer NOT NULL,
-                           PRIMARY KEY (comment_id, repply_comment_id)
+                           reply_comment_id integer NOT NULL,
+                           PRIMARY KEY (comment_id, reply_comment_id)
 );
 
 CREATE TABLE IF NOT EXISTS  "Threads" (
                            thread_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                            topic_id integer NOT NULL,
-                           init_comment_id integer NOT NULL,
+                           init_comment_id integer NULL,
                            popularity INTEGER NOT NULL DEFAULT 0
 );
 
@@ -59,8 +59,9 @@ CREATE TABLE IF NOT EXISTS  "Reaction_sets" (
 
 CREATE TABLE IF NOT EXISTS  "Pictures" (
                             picture_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                            name varchar(255),
-                            file oid NOT NULL
+                            name varchar(255) NOT NULL,
+                            content_type varchar(255) NOT NULL,
+                            file_oid oid NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS  "Picture_attachments" (
@@ -71,8 +72,9 @@ CREATE TABLE IF NOT EXISTS  "Picture_attachments" (
 
 CREATE TABLE IF NOT EXISTS  "Videos" (
                           video_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                          name varchar(255),
-                          file oid NOT NULL
+                          name varchar(255) NOT NULL,
+                          content_type varchar(255) NOT NULL,
+                          file_oid oid NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS  "Video_attachments" (
@@ -110,11 +112,6 @@ CREATE TABLE IF NOT EXISTS  "Captcha" (
 
 /* Users */
 
-ALTER TABLE "Users"
-    ADD FOREIGN KEY (role_id)
-        REFERENCES "Roles" (role_id)
-        ON DELETE RESTRICT;
-
 ALTER TABLE "Users" DROP CONSTRAINT IF EXISTS "username_minimal_length";
 ALTER TABLE "Users"
     ADD CONSTRAINT "username_minimal_length"
@@ -126,7 +123,7 @@ ALTER TABLE "Users"
         CHECK (isu_id > 0);
 
 /* Comments */
-
+/*TODO FIX ADD FK WITH VALIDATION THAN DOESN'T EXISTS*/
 ALTER TABLE "Comments"
     ADD FOREIGN KEY (reactions_id)
         REFERENCES "Reaction_sets" (r_set_id)
@@ -150,7 +147,7 @@ ALTER TABLE "Replies"
         ON DELETE NO ACTION;
 
 ALTER TABLE "Replies"
-    ADD FOREIGN KEY (repply_comment_id)
+    ADD FOREIGN KEY (reply_comment_id)
         REFERENCES "Comments" (comment_id)
         ON DELETE NO ACTION;
 
@@ -241,11 +238,11 @@ ALTER TABLE "Poll_answers"
 
 /* functions */
 
-CREATE OR REPLACE PROCEDURE append_reaction_to_comment(reaction_text varchar, c_id Integer)
+CREATE OR REPLACE PROCEDURE append_reaction_to_comment(reaction_text varchar, c_id bigint)
 AS '
     DECLARE
-r_id Integer;
-        r_cnt Integer;
+r_id bigint;
+        r_cnt bigint;
 BEGIN
         IF length(reaction_text) < 7 THEN
 SELECT reactions_id
@@ -266,7 +263,7 @@ UPDATE "Reaction_sets"
 SET reactions = jsonb_set(reactions, array[reaction_text], to_jsonb(r_cnt + 1), TRUE)
 WHERE r_set_id = r_id;
 ELSE
-            RAISE EXCEPTION ''Reaction is too long'';
+            RAISE EXCEPTION $$Reaction is too long$$;
 END IF;
 END;
 ' LANGUAGE PLPGSQL;
@@ -275,7 +272,7 @@ END;
   call append_reaction_to_comment('tl;dr',  15) 
 */
 
-CREATE OR REPLACE PROCEDURE throw_in_trash(comment_id integer, reason text)
+CREATE OR REPLACE PROCEDURE throw_in_trash(comment_id bigint, reason text)
 AS '
     INSERT INTO "Trash"(comment_id, reason) VALUES(comment_id, reason);
 UPDATE "Comments"
@@ -287,18 +284,18 @@ WHERE comment_id = throw_in_trash.comment_id;
    CALL throw_in_trash(5, 'You made a mistake when wrote there smth');
 */
 
-CREATE OR REPLACE PROCEDURE vote_in_poll(user_id integer, poll_id integer, answer_ids integer[])
+CREATE OR REPLACE PROCEDURE vote_in_poll(user_id_arg bigint, poll_id_arg bigint, answer_ids_arg bigint[])
 AS '
     DECLARE
-answer int;
+answer bigint;
 BEGIN
-        FOREACH answer IN ARRAY answer_ids
+        FOREACH answer IN ARRAY answer_ids_arg
         LOOP
 UPDATE "Poll_answers"
 SET votes_number = votes_number + 1
-WHERE poll_answer_id = answer AND poll_id = vote_in_poll.poll_id;
+WHERE poll_answer_id = answer AND poll_id = poll_id_arg;
 END LOOP;
-INSERT INTO "Voted_users"(poll_id, user_id) VALUES(poll_id, user_id);
+INSERT INTO "Voted_users"(poll_id, user_id) VALUES(poll_id_arg, user_id_arg);
 END;
 ' LANGUAGE PLPGSQL;
 
@@ -359,7 +356,7 @@ UPDATE "Comments"
 SET deleted = true
 WHERE comment_id IN
       (SELECT comment_id FROM "Trash"
-       WHERE recycle_date < NOW() - INTERVAL ''1 hour'');
+       WHERE recycle_date < NOW() - INTERVAL $$1 hour$$);
 RETURN NEW;
 END;
 ' LANGUAGE PLPGSQL;
@@ -372,7 +369,7 @@ CREATE OR REPLACE TRIGGER  trash_insert_comment_trigger
 
 /* indicies */
 
-CREATE INDEX "Users_isu_index" ON "Users" USING btree(isu_id); -- number
+/*CREATE INDEX "Users_isu_index" ON "Users" USING btree(isu_id); -- number
 -- CREATE INDEX "Users_role_index" ON "Users" USING hash(role); -- TOO SMALL
 CREATE INDEX "Users_username_substring_index" ON "Users" USING GIN(username); -- search text through names, never joins
 CREATE INDEX "Users_username_index" ON "Users" USING hash(username);
@@ -391,3 +388,4 @@ CREATE INDEX "Polls_comment_id_index" ON "Polls" USING hash(comment_id);
 
 CREATE INDEX "Trash_comment_id_index" ON "Trash" USING btree(comment_id); -- number
 CREATE INDEX "Trash_recycle_date_index" ON "Trash" USING btree(recycle_date); -- for filterings
+*/

@@ -1,0 +1,457 @@
+swagger: '2.0'
+info:
+  contact: {}
+  title: ITMO Chan
+  version: 1.0.0
+basePath: /api
+paths:
+  /auth/login:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              password:
+                example: password
+                type: string
+              username:
+                example: username
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Login success
+          headers:
+            Cache-Control:
+              type: string
+            Connection:
+              type: string
+            Date:
+              type: string
+            Expires:
+              type: string
+            Keep-Alive:
+              type: string
+            Pragma:
+              type: string
+            Transfer-Encoding:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              accessToken:
+                example: >-
+                  eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTcwNTcxMzIzMiwiZXhwIjoxNzA1NzE2ODMyfQ.76oJjJwCKDqp_ZUrHcYYPt2q5PDV2JYx7lk3myurXKjC4Ym9lG9Py04ZNCAthfft
+                type: string
+              username:
+                example: username
+                type: string
+            type: object
+        '400':
+          description: Wrong login or password
+          headers:
+            Cache-Control:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Date:
+              type: string
+            Expires:
+              type: string
+            Pragma:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              code:
+                example: 400
+                type: number
+              message:
+                example: Authorization Error
+                type: string
+            type: object
+      tags:
+        - Auth
+      description: Login
+      operationId: login
+      summary: Login
+  /auth/register:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              isuId:
+                example: null
+                x-nullable: true
+              password:
+                example: password
+                type: string
+              username:
+                example: username
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Register success
+          headers:
+            Cache-Control:
+              type: string
+            Connection:
+              type: string
+            Date:
+              type: string
+            Expires:
+              type: string
+            Keep-Alive:
+              type: string
+            Pragma:
+              type: string
+            Transfer-Encoding:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              accessToken:
+                example: >-
+                  eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTcwNTcxMjk1NSwiZXhwIjoxNzA1NzE2NTU1fQ.vrv9pb-oc-tjMdJhBmgWcIxBH5pQczSXcLws8j3WB-b8pFQ-2XoPb2Glv4cEX9gl
+                type: string
+              username:
+                example: username
+                type: string
+            type: object
+        '400':
+          description: Error IsuId should be positive
+          headers:
+            Cache-Control:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Date:
+              type: string
+            Expires:
+              type: string
+            Pragma:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              code:
+                example: 400
+                type: number
+              message:
+                example: IsuId should be positive number
+                type: string
+            type: object
+      tags:
+        - Auth
+      description: Register
+      operationId: register
+      summary: Register
+  /media/pic/1:
+    delete:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Media
+      description: Delete picture
+      operationId: deletePicture
+      summary: Delete picture
+  /media/pic/20:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Media
+      description: Get picture
+      operationId: getPicture
+      summary: Get picture
+  /media/vid/1:
+    delete:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Media
+      description: Delete video
+      operationId: deleteVideo
+      summary: Delete video
+  /media/vid/15:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Media
+      description: Get video
+      operationId: getVideo
+      summary: Get video
+  /poll/18:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            example:
+              - 2
+            items:
+              example: 2
+              type: number
+            type: array
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Poll
+      description: Vote in poll
+      operationId: voteInPoll
+      summary: Vote in poll
+  /poll/19:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Poll
+      description: Get poll
+      operationId: getPoll
+      summary: Get poll
+  /reactions:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              commentId:
+                example: 85
+                type: number
+              reaction:
+                example: kek
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Reactions
+      description: Append reaction to comment
+      operationId: appendReactionToComment
+      summary: Append reaction to comment
+  /reactions/66:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Reactions
+      description: Get reactions
+      operationId: getReactions
+      summary: Get reactions
+  /thread:
+    post:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: comment
+          type: string
+        - format: binary
+          in: formData
+          name: files
+          type: string
+        - in: formData
+          name: poll
+          type: string
+        - in: formData
+          name: thread
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Thread
+      description: Add thread
+      operationId: addThread
+      summary: Add thread
+  /thread/55/comments:
+    get:
+      parameters:
+        - in: query
+          name: offset
+          type: string
+        - in: query
+          name: limit
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Thread
+      description: Get thread comments with offset and limit
+      operationId: getThreadCommentsWithOffsetAndLimit
+      summary: Get thread comments with offset and limit
+  /thread/60:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Thread
+      description: Get thread
+      operationId: getThread
+      summary: Get thread
+  /topic:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Topic
+      description: Get all topics
+      operationId: getAllTopics
+      summary: Get all topics
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              description:
+                example: Mega vazhno
+                type: string
+              name:
+                example: topic432
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Topic
+      description: Add topic
+      operationId: addTopic
+      summary: Add topic
+  /topic/1:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Topic
+      description: Get certain topic
+      operationId: getCertainTopic
+      summary: Get certain topic
+  /topic/4:
+    delete:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Topic
+      description: Delete topic
+      operationId: deleteTopic
+      summary: Delete topic
+  /trash:
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              commentId:
+                example: 66
+                type: number
+              reason:
+                example: Ты не прав
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Trash
+      description: Throw in trash
+      operationId: throwInTrash
+      summary: Throw in trash
+  /trash/5:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Trash
+      description: Get trash of comment
+      operationId: getTrashOfComment
+      summary: Get trash of comment
+tags:
+  - name: Auth
+  - name: Media
+  - name: Poll
+  - name: Reactions
+  - name: Thread
+  - name: Topic
+  - name: Trash

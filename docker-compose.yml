@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+    container_name: itmochan-backend
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080/tcp"
+    networks:
+      - itmochan-network
+  postgres:
+    container_name: postgres-container-itmochan
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db-data:/data/postgres
+    expose:
+      - "5432"
+    networks:
+      - itmochan-network
+
+volumes:
+  db-data:
+    driver: local
+    name: postgres-itmochan
+
+networks:
+  itmochan-network:
+    driver: bridge

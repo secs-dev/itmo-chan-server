@@ -1,27 +1,29 @@
 package io.github.e1turin.itmochan.entity
 
+import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
+@Table("Comments")
 data class Comment(
-    val commentId : Int,
-    val threadId : Int,
+    val commentId : Long,
+    val threadId : Long,
     val title : String?,
     val content : String,
-    val userId : Int,
-    val reactionId : Int,
+    val userId : Long,
+    val reactionsId : Long,
     val creationDate : LocalDateTime,
     val trashed : Boolean,
     val deleted : Boolean,
 )
 
+@Table("Replies")
 data class Reply(
-    val commentId : Int,
-    val replyCommentId : Int,
+    val commentId : Long,
+    val replyCommentId : Long,
 )
 
 data class CommentDTO(
-    val threadId : Int,
+    val threadId : Long,
     val title : String?,
     val content : String,
-    val userId : Int,
 )
