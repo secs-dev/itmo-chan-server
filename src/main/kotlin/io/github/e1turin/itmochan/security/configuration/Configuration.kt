@@ -1,8 +1,8 @@
 package io.github.e1turin.itmochan.security.configuration
 
 import io.github.e1turin.itmochan.repository.UserRepository
-import io.github.e1turin.itmochan.security.service.CustomUserDetailsService
 import io.github.e1turin.itmochan.security.service.RoleService
+import io.github.e1turin.itmochan.security.service.impl.CustomUserDetailsServiceImpl
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,7 +27,7 @@ class Configuration {
         userRepository: UserRepository,
         roleService: RoleService,
         ): UserDetailsService =
-        CustomUserDetailsService(userRepository, roleService)
+        CustomUserDetailsServiceImpl(userRepository, roleService)
     @Bean
     fun encoder(): PasswordEncoder = BCryptPasswordEncoder()
     @Bean

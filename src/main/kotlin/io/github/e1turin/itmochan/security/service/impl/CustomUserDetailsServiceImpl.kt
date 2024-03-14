@@ -1,5 +1,6 @@
-package io.github.e1turin.itmochan.security.service
+package io.github.e1turin.itmochan.security.service.impl
 import io.github.e1turin.itmochan.repository.UserRepository
+import io.github.e1turin.itmochan.security.service.RoleService
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -10,7 +11,7 @@ import kotlin.jvm.optionals.getOrNull
 typealias ApplicationUser = io.github.e1turin.itmochan.entity.User
 
 @Service
-class CustomUserDetailsService(
+class CustomUserDetailsServiceImpl(
     val userRepository: UserRepository,
     val roleService: RoleService
 ) : UserDetailsService {
