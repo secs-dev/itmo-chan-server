@@ -44,7 +44,7 @@ class JWTAuthenticationFilter(
         }
         //TODO move to another filter
         catch(e : ExpiredJwtException) {
-            includeErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, "Token has been expired", response)
+            includeErrorToHttpResponse(HttpServletResponse.SC_UNAUTHORIZED, "Token has been expired", response)
             e.printStackTrace() //TODO add logger
         }
         catch (e : WrongUsernameException) {
@@ -52,7 +52,7 @@ class JWTAuthenticationFilter(
             e.printStackTrace() //TODO add logger
         }
         catch (e : JwtException) {
-            includeErrorToHttpResponse(HttpServletResponse.SC_BAD_REQUEST, "Invalid token", response)
+            includeErrorToHttpResponse(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token", response)
             e.printStackTrace() //TODO add logger
         }
         catch (e : UsernameNotFoundException) {
