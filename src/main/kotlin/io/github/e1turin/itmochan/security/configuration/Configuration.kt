@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 
 @Configuration
@@ -44,5 +47,13 @@ class Configuration {
     @Bean
     fun authenticationEntryPoint(): AuthenticationEntryPoint {
         return CustomAuthenticationEntryPoint()
+    }
+}
+
+@Configuration
+@EnableWebMvc
+class WebConfig : WebMvcConfigurer {
+    override fun addCorsMappings(registry: CorsRegistry) {
+        registry.addMapping("/**")
     }
 }
