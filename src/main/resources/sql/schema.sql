@@ -57,30 +57,16 @@ CREATE TABLE IF NOT EXISTS  "Reaction_sets" (
                                  reactions jsonb NOT NULL DEFAULT '{}'::jsonb
 );
 
-CREATE TABLE IF NOT EXISTS  "Pictures" (
-                            picture_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                            name varchar(255) NOT NULL,
-                            content_type varchar(255) NOT NULL,
-                            file_oid oid NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS  "Picture_attachments" (
-                                       comment_id integer NOT NULL,
-                                       picture_id integer NOT NULL,
-                                       PRIMARY KEY (comment_id, picture_id)
-);
-
-CREATE TABLE IF NOT EXISTS  "Videos" (
-                          video_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE IF NOT EXISTS  "Files" (
+                          file_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
                           name varchar(255) NOT NULL,
-                          content_type varchar(255) NOT NULL,
-                          file_oid oid NOT NULL
+                          content_type varchar(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS  "Video_attachments" (
+CREATE TABLE IF NOT EXISTS  "File_attachments" (
                                      comment_id integer NOT NULL,
-                                     video_id integer NOT NULL,
-                                     PRIMARY KEY (comment_id, video_id)
+                                     file_id uuid NOT NULL,
+                                     PRIMARY KEY (comment_id, file_id)
 );
 
 CREATE TABLE IF NOT EXISTS  "Polls" (
@@ -105,7 +91,7 @@ CREATE TABLE IF NOT EXISTS  "Poll_answers" (
 CREATE TABLE IF NOT EXISTS  "Captcha" (
                            captcha_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                            answer varchar(255),
-                           picture_id integer NOT NULL
+                           file_id uuid NOT NULL
 );
 
 /* constraints */
@@ -173,36 +159,18 @@ ALTER TABLE "Trash"
 /* Captcha */
 
 ALTER TABLE "Captcha"
-    ADD FOREIGN KEY (picture_id)
-        REFERENCES "Pictures" (picture_id)
+    ADD FOREIGN KEY (file_id)
+        REFERENCES "Files" (file_id)
         ON DELETE CASCADE;
 
-/* Picture_attachments */
+/* File_attachments */
 
-/*ALTER TABLE "Picture_attachments"
-    ADD PRIMARY KEY (comment_id, picture_id);
-*/
-ALTER TABLE "Picture_attachments"
-    ADD FOREIGN KEY (picture_id)
-        REFERENCES "Pictures" (picture_id)
+ALTER TABLE "File_attachments"
+    ADD FOREIGN KEY (file_id)
+        REFERENCES "Files" (file_id)
         ON DELETE CASCADE;
 
-ALTER TABLE "Picture_attachments"
-    ADD FOREIGN KEY (comment_id)
-        REFERENCES "Comments" (comment_id)
-        ON DELETE CASCADE;
-
-/* Video_attachments */
-/*
-ALTER TABLE "Video_attachments"
-    ADD PRIMARY KEY (comment_id, video_id);
-*/
-ALTER TABLE "Video_attachments"
-    ADD FOREIGN KEY (video_id)
-        REFERENCES "Videos" (video_id)
-        ON DELETE CASCADE;
-
-ALTER TABLE "Video_attachments"
+ALTER TABLE "File_attachments"
     ADD FOREIGN KEY (comment_id)
         REFERENCES "Comments" (comment_id)
         ON DELETE CASCADE;

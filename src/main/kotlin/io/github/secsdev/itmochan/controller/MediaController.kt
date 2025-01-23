@@ -1,7 +1,6 @@
 package io.github.secsdev.itmochan.controller
 
-import io.github.secsdev.itmochan.service.PictureService
-import io.github.secsdev.itmochan.service.VideoService
+import io.github.secsdev.itmochan.service.FileService
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -12,53 +11,32 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
+
 @RestController
 @RequestMapping("/api/media")
 class MediaController(
-    private val pictureService : PictureService,
-    private val videoService : VideoService,
+    private val fileService: FileService,
 ) {
-    @GetMapping("pic/{picture_id}")
-    @ResponseBody fun getPicture(
-        @PathVariable("picture_id") pictureId: Long,
+    @GetMapping("{file_id}")
+    @ResponseBody fun getFile(
+        @PathVariable("file_id") fileId: UUID,
     ) : ResponseEntity<ByteArray> {
-        val picture = pictureService.getPicture(pictureId)
+        val file = fileService.getFile(fileId)
         val headers = HttpHeaders()
-        headers.contentType = MediaType.valueOf(picture.picture.contentType)
+        headers.contentType = MediaType.valueOf(file.file.contentType)
         headers.contentDisposition =
-            ContentDisposition.builder("inline").filename(picture.picture.name).build()
+            ContentDisposition.builder("inline").filename(file.file.name).build()
 
         return ResponseEntity.ok()
             .headers(headers)
-            .body(picture.byteArray)
+            .body(file.byteArray)
     }
 
-    @GetMapping("vid/{video_id}")
-    @ResponseBody fun getVideo(
-        @PathVariable("video_id") videoId: Long,
-    ) : ResponseEntity<ByteArray> {
-        val video = videoService.getVideo(videoId)
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.valueOf(video.video.contentType)
-        headers.contentDisposition =
-            ContentDisposition.builder("inline").filename(video.video.name).build()
-
-        return ResponseEntity.ok()
-            .headers(headers)
-            .body(video.byteArray)
-    }
-
-    @DeleteMapping("pic/{picture_id}")
-    fun deletePicture(
-        @PathVariable("picture_id") pictureId: Long,
+    @DeleteMapping("{file_id}")
+    fun deleteFile(
+        @PathVariable("file_id") fileId: UUID,
     ) {
-        return pictureService.deletePicture(pictureId)
-    }
-
-    @DeleteMapping("vid/{video_id}")
-    fun deleteVideo(
-        @PathVariable("video_id") videoId: Long,
-    ) {
-        return videoService.deleteVideo(videoId)
+        fileService.deleteFile(fileId)
     }
 }

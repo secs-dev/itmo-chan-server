@@ -1,14 +1,8 @@
 package io.github.secsdev.itmochan.response
 
-import io.github.secsdev.itmochan.entity.Picture
-import io.github.secsdev.itmochan.entity.Video
+import io.github.secsdev.itmochan.entity.File
 
-class PictureDTO(
-    val picture : Picture,
-    val byteArray: ByteArray,
-)
-
-class VideoDTO(
-    val video : Video,
+class FileDTO(
+    val file: File,
     val byteArray: ByteArray,
 )

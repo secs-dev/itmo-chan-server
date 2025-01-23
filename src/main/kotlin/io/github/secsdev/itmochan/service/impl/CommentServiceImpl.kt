@@ -8,7 +8,7 @@ import io.github.secsdev.itmochan.exception.NoSuchCommentException
 import io.github.secsdev.itmochan.exception.NoSuchPollException
 import io.github.secsdev.itmochan.response.CommentResponse
 import io.github.secsdev.itmochan.service.CommentService
-import io.github.secsdev.itmochan.service.FileService
+import io.github.secsdev.itmochan.service.FilePreService
 import io.github.secsdev.itmochan.service.PollService
 import io.github.secsdev.itmochan.service.ReplyService
 import io.github.secsdev.itmochan.service.UserService
@@ -19,7 +19,7 @@ class CommentServiceImpl(
     private val commentRepository : CommentRepository,
     private val userService: UserService,
     private val replyService: ReplyService,
-    private val fileService: FileService,
+    private val filePreService: FilePreService,
     private val pollService: PollService,
 ): CommentService {
     override fun addComment(commentDTO : CommentDTO, username: String) : Long {
@@ -39,7 +39,7 @@ class CommentServiceImpl(
         val username = userService.findUserByUserId(comment.userId)
         val replies = replyService.getRepliesToComment(commentId)
         val repliedTo = replyService.getCommentsIdsWhomReplied(commentId)
-        val filesIds = fileService.getFilesIdsAttachedToComment(commentId)
+        val filesIds = filePreService.getFilesIdsAttachedToComment(commentId)
         val pollId : Long? = try {
             pollService.getPollIdByCommentId(commentId)
         } catch (_ : NoSuchPollException) {

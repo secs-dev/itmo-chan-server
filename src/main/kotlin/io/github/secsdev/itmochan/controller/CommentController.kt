@@ -5,7 +5,7 @@ import io.github.secsdev.itmochan.entity.PollDTO
 import io.github.secsdev.itmochan.response.CommentId
 import io.github.secsdev.itmochan.response.CommentResponse
 import io.github.secsdev.itmochan.service.CommentService
-import io.github.secsdev.itmochan.service.FileService
+import io.github.secsdev.itmochan.service.FilePreService
 import io.github.secsdev.itmochan.service.PollService
 import io.github.secsdev.itmochan.service.ReplyService
 import jakarta.validation.Valid
@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("/api/comment")
 class CommentController(
     private val commentService: CommentService,
-    private val fileService: FileService,
+    private val filePreService: FilePreService,
     private val pollService: PollService,
     private val replyService: ReplyService,
 ) {
@@ -31,9 +31,9 @@ class CommentController(
         @RequestPart("repliedTo") repliedTo: List<Long>?,
         @AuthenticationPrincipal userDetails: UserDetails,
     ): CommentId {
-        val fileIds = fileService.store(files)
+        val fileIds = filePreService.store(files)
         val commentId = commentService.addComment(comment, userDetails.username)
-        fileService.linkFileIdAndCommentId(commentId, fileIds)
+        filePreService.linkFileIdAndCommentId(commentId, fileIds)
         pollService.createPoll(commentId, poll)
         replyService.saveRepliesTo(commentId, repliedTo ?: emptyList())
         return CommentId(commentId)

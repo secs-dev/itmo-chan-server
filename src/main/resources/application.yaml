@@ -23,3 +23,9 @@ jwt:
   key: TEMP_JWT_KEY_SHOULD_BE_CHANGED_AND_MOVED_TO_ENVIRONMENT #TODO
   access-token-expiration: 3600000
   refresh-token-expiration: 86400000 #TODO UNUSED
+minio-client:
+  url: "http://minio:9000"
+  accessKey: "minioadmin"
+  secretKey: "minioadmin"
+  bucket:
+    files: uploaded-files

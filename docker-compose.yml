@@ -24,11 +24,27 @@ services:
       - "5432"
     networks:
       - itmochan-network
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - s3-data:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server --console-address ":9001" /data
+    networks:
+      - itmochan-network
 
 volumes:
   db-data:
     driver: local
     name: postgres-itmochan
+  s3-data:
+    driver: local
+    name: s3-itmochan
 
 networks:
   itmochan-network:
