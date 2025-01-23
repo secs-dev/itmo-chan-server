@@ -240,37 +240,6 @@ END;
   call append_reaction_to_comment('tl;dr',  15)
 */
 
-CREATE OR REPLACE PROCEDURE throw_in_trash(comment_id bigint, reason text)
-AS '
-    INSERT INTO "Trash"(comment_id, reason) VALUES(comment_id, reason);
-UPDATE "Comments"
-SET trashed = true
-WHERE comment_id = throw_in_trash.comment_id;
-' LANGUAGE SQL;
-
-/* EXAMPLE
-   CALL throw_in_trash(5, 'You made a mistake when wrote there smth');
-*/
-
-CREATE OR REPLACE PROCEDURE vote_in_poll(user_id_arg bigint, poll_id_arg bigint, answer_ids_arg bigint[])
-AS '
-    DECLARE
-answer bigint;
-BEGIN
-        FOREACH answer IN ARRAY answer_ids_arg
-        LOOP
-UPDATE "Poll_answers"
-SET votes_number = votes_number + 1
-WHERE poll_answer_id = answer AND poll_id = poll_id_arg;
-END LOOP;
-INSERT INTO "Voted_users"(poll_id, user_id) VALUES(poll_id_arg, user_id_arg);
-END;
-' LANGUAGE PLPGSQL;
-
-/* EXAMPLE
-   CALL vote_in_poll(5, 2, array[1,2]);
-*/
-
 /* triggers */
 
 CREATE OR REPLACE FUNCTION create_reaction_set_for_comment()
