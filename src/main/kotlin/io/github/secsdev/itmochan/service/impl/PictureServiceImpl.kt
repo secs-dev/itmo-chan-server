@@ -1,29 +1,26 @@
 package io.github.secsdev.itmochan.service.impl
 
-import io.github.secsdev.itmochan.repository.FileRepository
 import io.github.secsdev.itmochan.repository.PictureAttachmentsRepository
 import io.github.secsdev.itmochan.repository.PictureRepository
 import io.github.secsdev.itmochan.response.PictureDTO
 import io.github.secsdev.itmochan.exception.FileNotFoundException
 import io.github.secsdev.itmochan.exception.StorageException
+import io.github.secsdev.itmochan.repository.S3Repository
 import io.github.secsdev.itmochan.service.PictureService
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.io.File
 import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.sql.SQLException
-import kotlin.math.abs
+import java.util.UUID
 
 @Service
 class PictureServiceImpl(
-    private val fileRepository: FileRepository,
+    private val s3Repository: S3Repository,
     private val pictureRepository: PictureRepository,
     private val pictureAttachmentsRepository: PictureAttachmentsRepository,
 ): PictureService {
 
-    override fun store(file: MultipartFile) : Long {
+    override fun store(file: MultipartFile) : UUID {
         if (file.isEmpty) {
             throw StorageException("Failed to store empty file") //todo 400
         }
@@ -31,19 +28,12 @@ class PictureServiceImpl(
             throw StorageException("Empty content type")
         }
         try {
-            val fil = File.createTempFile("tempfile--", null)
+            val fileContentType = file.contentType!!
+            val filename = file.originalFilename ?: "untitled"
 
-            file.inputStream.use { inputStream ->
-                Files.copy(
-                    inputStream, fil.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING
-                )
-            }
+            val pictureId = pictureRepository.savePicture(filename, fileContentType)
+            s3Repository.saveFile(pictureId.toString(), fileContentType, file.inputStream)
 
-            val oid = fileRepository.saveFile(fil)
-            val pictureId = pictureRepository.savePicture(file.originalFilename ?: abs(file.hashCode()).toString(), file.contentType!!, oid)
-
-            fil.delete()
             return pictureId
 
         } catch (e: IOException) {
@@ -55,12 +45,12 @@ class PictureServiceImpl(
         }
     }
 
-    override fun getPicture(pictureId : Long) : PictureDTO {
+    override fun getPicture(pictureId : UUID) : PictureDTO {
         val picture = pictureRepository.findPictureByPictureId(pictureId)
         if (picture.isEmpty)
             throw FileNotFoundException("File not found")
         try {
-            val byteArray = fileRepository.getFileByteArray(picture.get().fileOid)
+            val byteArray = s3Repository.getFileByteArray(picture.get().pictureId.toString())
             return PictureDTO(picture.get(), byteArray)
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -68,17 +58,17 @@ class PictureServiceImpl(
         }
     }
 
-    override fun savePictureAttachment(commentId: Long, pictureId: Long) {
+    override fun savePictureAttachment(commentId: Long, pictureId: UUID) {
         pictureAttachmentsRepository.savePictureAttachment(commentId, pictureId)
     }
 
-    override fun deletePicture(pictureId: Long) {
+    override fun deletePicture(pictureId: UUID) {
         val picture = pictureRepository.findPictureByPictureId(pictureId)
         if (picture.isEmpty)
             throw FileNotFoundException("File not found")
 
         try {
-            fileRepository.deleteFile(picture.get().fileOid)
+            s3Repository.deleteFile(picture.get().pictureId.toString())
             pictureRepository.deleteByPictureId(pictureId)
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -86,7 +76,7 @@ class PictureServiceImpl(
         }
     }
 
-    override fun getPictureIdsByCommentId(commentId: Long) : List<Long> {
+    override fun getPictureIdsByCommentId(commentId: Long) : List<UUID> {
         val pictureAttachments = pictureAttachmentsRepository.findPictureAttachmentsByCommentId(commentId)
         return pictureAttachments.map { it.pictureId }
     }

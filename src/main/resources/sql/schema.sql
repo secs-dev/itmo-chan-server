@@ -58,28 +58,26 @@ CREATE TABLE IF NOT EXISTS  "Reaction_sets" (
 );
 
 CREATE TABLE IF NOT EXISTS  "Pictures" (
-                            picture_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+                            picture_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
                             name varchar(255) NOT NULL,
-                            content_type varchar(255) NOT NULL,
-                            file_oid oid NOT NULL
+                            content_type varchar(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS  "Picture_attachments" (
                                        comment_id integer NOT NULL,
-                                       picture_id integer NOT NULL,
+                                       picture_id uuid NOT NULL,
                                        PRIMARY KEY (comment_id, picture_id)
 );
 
 CREATE TABLE IF NOT EXISTS  "Videos" (
-                          video_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+                          video_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
                           name varchar(255) NOT NULL,
-                          content_type varchar(255) NOT NULL,
-                          file_oid oid NOT NULL
+                          content_type varchar(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS  "Video_attachments" (
                                      comment_id integer NOT NULL,
-                                     video_id integer NOT NULL,
+                                     video_id uuid NOT NULL,
                                      PRIMARY KEY (comment_id, video_id)
 );
 
@@ -105,7 +103,7 @@ CREATE TABLE IF NOT EXISTS  "Poll_answers" (
 CREATE TABLE IF NOT EXISTS  "Captcha" (
                            captcha_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                            answer varchar(255),
-                           picture_id integer NOT NULL
+                           picture_id uuid NOT NULL
 );
 
 /* constraints */

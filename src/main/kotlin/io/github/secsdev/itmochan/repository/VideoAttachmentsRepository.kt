@@ -5,6 +5,7 @@ import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
+import java.util.*
 
 interface VideoAttachmentsRepository : CrudRepository<VideoAttachments, Long> {
 
@@ -12,7 +13,7 @@ interface VideoAttachmentsRepository : CrudRepository<VideoAttachments, Long> {
     @Query("INSERT INTO \"Video_attachments\"(comment_id, video_id) VALUES (:comment_id, :video_id)")
     fun saveVideoAttachment(
         @Param("comment_id") commentId : Long,
-        @Param("video_id") videoId: Long,
+        @Param("video_id") videoId: UUID,
     )
 
     fun findVideoAttachmentsByCommentId(commentId: Long) : List<VideoAttachments>

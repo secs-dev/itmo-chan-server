@@ -8,6 +8,7 @@ import java.io.File
 import java.io.FileInputStream
 
 @Repository
+@Deprecated("Use S3Repository instead of storing in postgresql")
 class FileRepository(
     private val jdbcTemplate: JdbcTemplate
 ) {

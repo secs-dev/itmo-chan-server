@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
+
 @RestController
 @RequestMapping("/api/media")
 class MediaController(
@@ -20,7 +22,7 @@ class MediaController(
 ) {
     @GetMapping("pic/{picture_id}")
     @ResponseBody fun getPicture(
-        @PathVariable("picture_id") pictureId: Long,
+        @PathVariable("picture_id") pictureId: UUID,
     ) : ResponseEntity<ByteArray> {
         val picture = pictureService.getPicture(pictureId)
         val headers = HttpHeaders()
@@ -35,7 +37,7 @@ class MediaController(
 
     @GetMapping("vid/{video_id}")
     @ResponseBody fun getVideo(
-        @PathVariable("video_id") videoId: Long,
+        @PathVariable("video_id") videoId: UUID,
     ) : ResponseEntity<ByteArray> {
         val video = videoService.getVideo(videoId)
         val headers = HttpHeaders()
@@ -50,14 +52,14 @@ class MediaController(
 
     @DeleteMapping("pic/{picture_id}")
     fun deletePicture(
-        @PathVariable("picture_id") pictureId: Long,
+        @PathVariable("picture_id") pictureId: UUID,
     ) {
         return pictureService.deletePicture(pictureId)
     }
 
     @DeleteMapping("vid/{video_id}")
     fun deleteVideo(
-        @PathVariable("video_id") videoId: Long,
+        @PathVariable("video_id") videoId: UUID,
     ) {
         return videoService.deleteVideo(videoId)
     }
