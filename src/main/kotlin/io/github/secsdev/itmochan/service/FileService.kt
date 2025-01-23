@@ -1,17 +1,19 @@
 package io.github.secsdev.itmochan.service
 
-import io.github.secsdev.itmochan.entity.FilesIds
+import io.github.secsdev.itmochan.entity.File
+import io.github.secsdev.itmochan.response.FileDTO
 import org.springframework.web.multipart.MultipartFile
+import java.util.UUID
 
 interface FileService {
-    companion object AllowedTypes {
-        val ALLOWED_PICTURE_TYPES = listOf("image/png", "image/jpeg", "image/gif")
-        val ALLOWED_VIDEO_TYPES  = listOf( "video/mpeg", "video/webm", "video/3gpp", "video/mp4")
-    }
+    fun store(file: MultipartFile) : UUID
 
-    fun store(files : List<MultipartFile>?) : FilesIds
+    fun getFile(fileId : UUID) : FileDTO
 
-    fun linkFileIdAndCommentId(commentId: Long, filesIds : FilesIds)
+    fun getFileMeta(fileId : UUID) : File
+    fun saveFileAttachment(commentId: Long, fileId: UUID)
 
-    fun getFilesIdsAttachedToComment(commentId: Long) : FilesIds
+    fun deleteFile(fileId: UUID)
+
+    fun getFileIdsByCommentId(commentId: Long) : List<UUID>
 }

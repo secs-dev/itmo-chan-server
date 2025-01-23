@@ -81,6 +81,18 @@ CREATE TABLE IF NOT EXISTS  "Video_attachments" (
                                      PRIMARY KEY (comment_id, video_id)
 );
 
+CREATE TABLE IF NOT EXISTS  "Files" (
+                          file_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+                          name varchar(255) NOT NULL,
+                          content_type varchar(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS  "File_attachments" (
+                                     comment_id integer NOT NULL,
+                                     file_id uuid NOT NULL,
+                                     PRIMARY KEY (comment_id, file_id)
+);
+
 CREATE TABLE IF NOT EXISTS  "Polls" (
                          poll_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                          comment_id integer NOT NULL,
@@ -177,9 +189,6 @@ ALTER TABLE "Captcha"
 
 /* Picture_attachments */
 
-/*ALTER TABLE "Picture_attachments"
-    ADD PRIMARY KEY (comment_id, picture_id);
-*/
 ALTER TABLE "Picture_attachments"
     ADD FOREIGN KEY (picture_id)
         REFERENCES "Pictures" (picture_id)
@@ -191,16 +200,25 @@ ALTER TABLE "Picture_attachments"
         ON DELETE CASCADE;
 
 /* Video_attachments */
-/*
-ALTER TABLE "Video_attachments"
-    ADD PRIMARY KEY (comment_id, video_id);
-*/
+
 ALTER TABLE "Video_attachments"
     ADD FOREIGN KEY (video_id)
         REFERENCES "Videos" (video_id)
         ON DELETE CASCADE;
 
 ALTER TABLE "Video_attachments"
+    ADD FOREIGN KEY (comment_id)
+        REFERENCES "Comments" (comment_id)
+        ON DELETE CASCADE;
+
+/* File_attachments */
+
+ALTER TABLE "File_attachments"
+    ADD FOREIGN KEY (file_id)
+        REFERENCES "Files" (file_id)
+        ON DELETE CASCADE;
+
+ALTER TABLE "File_attachments"
     ADD FOREIGN KEY (comment_id)
         REFERENCES "Comments" (comment_id)
         ON DELETE CASCADE;

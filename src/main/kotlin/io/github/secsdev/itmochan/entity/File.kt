@@ -3,15 +3,16 @@ package io.github.secsdev.itmochan.entity
 import org.springframework.data.relational.core.mapping.Table
 import java.util.UUID
 
-@Table("Pictures")
-data class Picture(
-    val pictureId : UUID,
+@Table("Files")
+data class File(
+    val fileId : UUID,
     val name : String,
-    val contentType : String,
+    val contentType : String
 )
 
-@Table("Picture_attachments")
-data class PictureAttachments(
+@Table("File_attachments")
+data class FileAttachments(
     val commentId : Long,
-    val pictureId : UUID,
+    val fileId : UUID,
 )
+

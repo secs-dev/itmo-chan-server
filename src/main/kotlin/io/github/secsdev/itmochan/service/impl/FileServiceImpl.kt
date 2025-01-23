@@ -1,55 +1,89 @@
 package io.github.secsdev.itmochan.service.impl
 
-import io.github.secsdev.itmochan.entity.FilesIds
-import io.github.secsdev.itmochan.exception.MaxCountFilesException
-import io.github.secsdev.itmochan.exception.UnsupportableFileTypeException
+import io.github.secsdev.itmochan.entity.File
+import io.github.secsdev.itmochan.exception.FileNotFoundException
+import io.github.secsdev.itmochan.exception.StorageException
+import io.github.secsdev.itmochan.repository.*
+import io.github.secsdev.itmochan.response.FileDTO
 import io.github.secsdev.itmochan.service.FileService
-import io.github.secsdev.itmochan.service.FileService.AllowedTypes.ALLOWED_PICTURE_TYPES
-import io.github.secsdev.itmochan.service.FileService.AllowedTypes.ALLOWED_VIDEO_TYPES
-import io.github.secsdev.itmochan.service.PictureService
-import io.github.secsdev.itmochan.service.VideoService
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.io.IOException
+import java.sql.SQLException
+import java.util.UUID
 
 @Service
 class FileServiceImpl(
-    private val pictureService: PictureService,
-    private val videoService: VideoService,
+    private val s3Repository: S3Repository,
+    private val fileRepository: FileRepositoryV2,
+    private val fileAttachmentsRepository: FileAttachmentsRepository,
 ): FileService {
 
+    override fun store(file: MultipartFile) : UUID {
+        if (file.isEmpty) {
+            throw StorageException("Failed to store empty file") //todo 400
+        }
+        if (file.contentType == null) {
+            throw StorageException("Empty content type")
+        }
+        try {
+            val fileContentType = file.contentType!!
+            val filename = file.originalFilename ?: "untitled"
 
-    override fun store(files : List<MultipartFile>?) : FilesIds {
-        if (files == null)
-            return FilesIds(emptyList(), emptyList())
-        if (files.size > 10) {
-            throw MaxCountFilesException("You can upload only 10 files")
-        }
-        val fileWithUnsupportableType = files.stream().filter {
-            it.contentType !in ALLOWED_PICTURE_TYPES && it.contentType !in ALLOWED_VIDEO_TYPES
-        }.findAny()
-        if (fileWithUnsupportableType.isPresent) {
-            throw UnsupportableFileTypeException(
-                "You uploaded file with restricted type: ${fileWithUnsupportableType.get().contentType}")
-        }
-        val pictureIds =
-            files.parallelStream().filter { it.contentType in ALLOWED_PICTURE_TYPES }.map{pictureService.store(it)}.toList()
-        val videoIds =
-            files.parallelStream().filter { it.contentType in ALLOWED_VIDEO_TYPES }.map { videoService.store(it) }.toList()
-        return FilesIds(pictureIds, videoIds)
-    }
+            val fileId = fileRepository.saveFile(filename, fileContentType)
+            s3Repository.saveFile(fileId.toString(), fileContentType, file.inputStream)
 
-    override fun linkFileIdAndCommentId(commentId: Long, filesIds : FilesIds) {
-        filesIds.picturesIds.parallelStream().forEach {
-            pictureService.savePictureAttachment(commentId, it)
-        }
-        filesIds.videosIds.parallelStream().forEach {
-            videoService.saveVideoAttachment(commentId, it)
+            return fileId
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw StorageException("Failed to store file") //todo 500
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            throw StorageException("Failed to store file") //todo 500
         }
     }
 
-    override fun getFilesIdsAttachedToComment(commentId: Long) : FilesIds {
-        val picturesIds = pictureService.getPictureIdsByCommentId(commentId)
-        val videosIds = videoService.getVideoIdsByCommentId(commentId)
-        return FilesIds(picturesIds, videosIds)
+    override fun getFile(fileId : UUID) : FileDTO {
+        val file = fileRepository.findFileByFileId(fileId)
+        if (file.isEmpty)
+            throw FileNotFoundException("File not found")
+        try {
+            val byteArray = s3Repository.getFileByteArray(file.get().fileId.toString())
+            return FileDTO(file.get(), byteArray)
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            throw StorageException("Failed to get file") //todo 500
+        }
+    }
+
+    override fun getFileMeta(fileId: UUID): File {
+        val file = fileRepository.findFileByFileId(fileId)
+        if (file.isEmpty)
+            throw FileNotFoundException("File not found")
+        return file.get()
+    }
+
+    override fun saveFileAttachment(commentId: Long, fileId: UUID) {
+        fileAttachmentsRepository.saveFileAttachment(commentId, fileId)
+    }
+
+    override fun deleteFile(fileId: UUID) {
+        val file = fileRepository.findFileByFileId(fileId)
+        if (file.isEmpty)
+            throw FileNotFoundException("File not found")
+
+        try {
+            s3Repository.deleteFile(file.get().fileId.toString())
+            fileRepository.deleteByFileId(fileId)
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            throw StorageException("Deletion error") //todo make db exception with 500 code
+        }
+    }
+
+    override fun getFileIdsByCommentId(commentId: Long) : List<UUID> {
+        val fileAttachments = fileAttachmentsRepository.findFileAttachmentsByCommentId(commentId)
+        return fileAttachments.map { it.fileId }
     }
 }

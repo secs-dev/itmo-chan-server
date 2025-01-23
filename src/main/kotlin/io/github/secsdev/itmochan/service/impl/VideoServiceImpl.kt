@@ -14,6 +14,7 @@ import java.sql.SQLException
 import java.util.UUID
 
 @Service
+@Deprecated("Use FileService for any files")
 class VideoServiceImpl(
     private val s3Repository: S3Repository,
     private val videoRepository: VideoRepository,

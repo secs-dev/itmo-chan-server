@@ -4,6 +4,7 @@ import io.github.secsdev.itmochan.response.PictureDTO
 import org.springframework.web.multipart.MultipartFile
 import java.util.UUID
 
+@Deprecated("Use FileService for any files")
 interface PictureService {
     fun store(file: MultipartFile) : UUID
 
