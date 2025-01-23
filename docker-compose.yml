@@ -13,7 +13,7 @@ services:
       - itmochan-network
   postgres:
     container_name: postgres-container-itmochan
-    image: postgres
+    image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password

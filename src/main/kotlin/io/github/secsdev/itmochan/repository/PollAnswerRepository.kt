@@ -19,12 +19,13 @@ interface PollAnswerRepository : CrudRepository<PollAnswer, Long> {
 
     @Modifying
     @Transactional
-    @Query("CALL vote_in_poll(:user_id, :poll_id, array[:answers])")
-    fun voteInPoll(
-        @Param("user_id") userId: Long,
-        @Param("poll_id") pollId: Long,
-        @Param("answers") answersIds: List<Long>,
-    )
+    @Query("UPDATE PollAnswer pa SET pa.votesNumber = pa.votesNumber + 1 WHERE pa.pollAnswerId IN :answers AND pa.pollId = :pollId")
+    fun incrementVotes(@Param("pollId") pollId: Long, @Param("answers") answers: List<Long>)
+
+    @Modifying
+    @Transactional
+    @Query("INSERT INTO VotedUsers (poll_id, user_id) VALUES (:pollId, :userId)")
+    fun insertVotedUser(@Param("pollId") pollId: Long, @Param("userId") userId: Long)
 
     fun findPollAnswersByPollId(pollId: Long) : List<PollAnswer>
 }

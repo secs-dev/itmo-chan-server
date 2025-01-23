@@ -1,16 +1,17 @@
 package io.github.secsdev.itmochan.service.impl
 
 import io.github.secsdev.itmochan.entity.PollDTO
+import io.github.secsdev.itmochan.exception.EmptyAnswersListException
+import io.github.secsdev.itmochan.exception.NoSuchPollException
+import io.github.secsdev.itmochan.exception.UserAlreadyVotedException
 import io.github.secsdev.itmochan.repository.PollAnswerRepository
 import io.github.secsdev.itmochan.repository.PollRepository
 import io.github.secsdev.itmochan.repository.VotedUsersRepository
 import io.github.secsdev.itmochan.response.PollResponse
-import io.github.secsdev.itmochan.exception.EmptyAnswersListException
-import io.github.secsdev.itmochan.exception.NoSuchPollException
-import io.github.secsdev.itmochan.exception.UserAlreadyVotedException
 import io.github.secsdev.itmochan.service.PollService
 import io.github.secsdev.itmochan.service.UserService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PollServiceImpl (
@@ -45,8 +46,7 @@ class PollServiceImpl (
         val votedUser = votedUsersRepository.findVotedUsersByUserIdAndPollId(user.userId, pollId)
         if (votedUser.isPresent)
             throw UserAlreadyVotedException("You have already voted in this poll")
-
-        pollAnswerRepository.voteInPoll(user.userId, pollId, answersIds)
+        performVoteOperation(pollId = pollId, answersIds = answersIds, userId = user.userId)
     }
 
     override fun getPoll(pollId: Long): PollResponse {
@@ -64,5 +64,15 @@ class PollServiceImpl (
         if (poll.isEmpty)
             throw NoSuchPollException("No such poll was found")
         return poll.get().pollId
+    }
+
+    @Transactional
+    private fun performVoteOperation(
+        userId: Long,
+        pollId: Long,
+        answersIds: List<Long>,
+    ) {
+        pollAnswerRepository.incrementVotes(pollId = pollId, answers = answersIds)
+        pollAnswerRepository.insertVotedUser(pollId = pollId, userId = userId)
     }
 }

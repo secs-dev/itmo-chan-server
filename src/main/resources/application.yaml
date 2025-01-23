@@ -5,17 +5,17 @@ spring:
     allow-bean-definition-overriding: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgres:5432/
+    url: jdbc:postgresql://postgres:5432/postgres
     username: postgres
     password: password
   jpa:
     generate-ddl: true
     show-sql: true
-  sql:
-    init:
-      schema-locations: classpath:sql/schema.sql
-      data-locations: classpath:sql/data.sql
-      mode: always
+  flyway:
+    enabled: true
+    locations: classpath:db/migrations
+    baseline-on-migrate: true
+    validate-on-migrate: true
   servlet.multipart:
     max-file-size: 10MB
     max-request-size: 10MB

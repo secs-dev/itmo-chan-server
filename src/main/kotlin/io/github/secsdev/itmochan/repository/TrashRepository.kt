@@ -5,15 +5,19 @@ import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
-import java.util.*
+import org.springframework.transaction.annotation.Transactional
+import java.util.Optional
 
 interface TrashRepository : CrudRepository<Trash, Long> {
     @Modifying
-    @Query("CALL throw_in_trash(:comment_id, :reason)")
-    fun throwInTrash(
-        @Param("comment_id") commentId : Long,
-        @Param("reason") reason : String?,
-    )
+    @Transactional
+    @Query("INSERT INTO Trash (comment_id, reason) VALUES (:commentId, :reason)")
+    fun insertIntoTrash(@Param("commentId") commentId: Long, @Param("reason") reason: String?)
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Comments SET trashed = true WHERE comment_id = :commentId")
+    fun updateCommentAsTrashed(@Param("commentId") commentId: Long)
 
     fun findTrashByCommentId(commentId: Long) : Optional<Trash>
 }
